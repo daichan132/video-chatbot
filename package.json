@@ -1,0 +1,82 @@
+{
+  "name": "video-chatbot",
+  "version": "0.1.0",
+  "dependencies": {
+    "@emotion/react": "^11.11.0",
+    "@emotion/server": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@mantine/core": "^6.0.10",
+    "@mantine/form": "^6.0.10",
+    "@mantine/hooks": "^6.0.10",
+    "@mantine/next": "^6.0.10",
+    "@types/node": "20.1.1",
+    "@types/react": "18.2.6",
+    "@types/react-dom": "18.2.4",
+    "eslint": "^8.40.0",
+    "eslint-config-next": "13.4.1",
+    "next": "^13.4.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-icons": "^4.8.0",
+    "react-markdown": "^8.0.7",
+    "react-use": "^17.4.0",
+    "typescript": "5.0.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.21.8",
+    "@emotion/babel-plugin": "^11.11.0",
+    "@storybook/addon-essentials": "^7.0.10",
+    "@storybook/addon-interactions": "^7.0.10",
+    "@storybook/addon-links": "^7.0.10",
+    "@storybook/nextjs": "^7.0.10",
+    "@storybook/react": "^7.0.10",
+    "@storybook/testing-library": "^0.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.5",
+    "@typescript-eslint/parser": "^5.59.5",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-import-resolver-typescript": "^3.5.5",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-storybook": "^0.6.12",
+    "husky": "^8.0.0",
+    "hygen": "^6.2.11",
+    "lint-staged": "^13.2.2",
+    "prettier": "2.8.8",
+    "sass": "^1.62.1",
+    "storybook": "^7.0.10"
+  },
+  "eslintConfig": {
+    "overrides": [
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
+    ]
+  },
+  "lint-staged": {
+    "*.{js,ts,jsx,tsx}": [
+      "yarn lint:fix"
+    ]
+  },
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "build-storybook": "storybook build",
+    "dev": "next dev",
+    "format": "prettier --write \"./src/**/*.{ts,tsx}\"",
+    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix",
+    "prepare": "cd .. && husky install frontend/.husky",
+    "start": "next start",
+    "storybook": "storybook dev -p 6006",
+    "typecheck": "tsc --noEmit"
+  }
+}
