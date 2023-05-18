@@ -2,12 +2,50 @@
 import type { AppProps } from 'next/app';
 import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core';
 import Head from 'next/head';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { supabase } from '@/utils/supabase';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const App = ({ Component, pageProps }: AppProps) => {
   const [colorScheme, setColorScheme] = useState<ColorScheme>('light');
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
+
+  const { push, pathname } = useRouter();
+
+  supabase.auth.onAuthStateChange((event) => {
+    if (event === 'SIGNED_IN' && pathname === '/') {
+      push('/');
+    }
+    if (event === 'SIGNED_OUT') {
+      push('/login');
+    }
+  });
+  useEffect(() => {
+    const validateSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session?.user && pathname === '/login') {
+        push('/');
+      } else if (!session?.user && pathname !== '/login') {
+        await push('/login');
+      }
+    };
+    validateSession();
+  }, [pathname, push]);
+
   return (
     <>
       <Head>
@@ -18,7 +56,10 @@ const App = ({ Component, pageProps }: AppProps) => {
       </Head>
       <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
         <MantineProvider withGlobalStyles withNormalizeCSS>
-          <Component {...pageProps} />
+          <QueryClientProvider client={queryClient}>
+            <Component {...pageProps} />
+            <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+          </QueryClientProvider>
         </MantineProvider>
       </ColorSchemeProvider>
     </>

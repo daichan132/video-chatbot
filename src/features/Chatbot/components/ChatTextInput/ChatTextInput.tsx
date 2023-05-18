@@ -2,7 +2,20 @@ import { Button, Flex, TextInput, createStyles } from '@mantine/core';
 import { Dispatch, SetStateAction, type FC } from 'react';
 
 const useStyles = createStyles(() => ({
-  boxShadow: { boxShadow: '0px 0px 15px -5px #cccccc' },
+  chatTextInputWrapper: {
+    position: 'absolute',
+    bottom: '50px',
+    left: '50%',
+    botttom: 0,
+    transform: 'translateX(-50%)',
+    maxWidth: 600,
+    width: '100%',
+    boxSizing: 'border-box',
+  },
+  boxShadow: {
+    boxShadow: '0px 0px 15px -5px #cccccc',
+    width: '100%',
+  },
 }));
 
 export type ChatTextInputProps = {
@@ -21,10 +34,9 @@ export const ChatTextInput: FC<ChatTextInputProps> = ({
   const { classes } = useStyles();
 
   return (
-    <Flex w="95%" maw={800} gap="md" m="0 auto">
+    <Flex px={20} align="center" justify="center" className={classes.chatTextInputWrapper} gap="md">
       <TextInput
         className={classes.boxShadow}
-        w="100%"
         value={inputText}
         onChange={(e) => setInputText(e.target.value)}
       />

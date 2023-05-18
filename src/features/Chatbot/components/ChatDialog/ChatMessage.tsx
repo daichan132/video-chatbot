@@ -9,7 +9,7 @@ const useStyles = createStyles((theme, speakerId: number) => ({
   container: {
     width: '100%',
     backgroundColor: speakerId ? '#fff' : '#f7f7f7',
-    padding: '30px 20px',
+    padding: '12px 16px',
     borderBottom: '1px solid #d6d6d6',
   },
   flexWrapper: { maxWidth: 800, margin: '0 auto' },
