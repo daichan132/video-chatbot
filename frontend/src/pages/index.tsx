@@ -1,7 +1,7 @@
 /* eslint-disable no-shadow */
-import { Auth } from '@/components/elements';
 import { Layout } from '@/components/layout';
-import { Chatbot } from '@/features/Chatbot';
+import { Chatbot } from '@/features/chatbot';
+import { LoginForm } from '@/features/auth';
 import useStore from '@/stores/supabaseStore';
 import { supabase } from '@/utils/supabase';
 import { useEffect } from 'react';
@@ -14,7 +14,17 @@ const Home = () => {
       setSession(session);
     });
   }, [setSession]);
-  return <Layout>{!session ? <Auth /> : <Chatbot />}</Layout>;
+  return (
+    <div>
+      {!session ? (
+        <LoginForm />
+      ) : (
+        <Layout>
+          <Chatbot />
+        </Layout>
+      )}
+    </div>
+  );
 };
 
 export default Home;

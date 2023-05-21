@@ -1,6 +1,5 @@
 import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
-import { useState, useEffect } from 'react';
+import { devtools } from 'zustand/middleware';
 
 export interface FileType {
   name: string;
@@ -27,40 +26,21 @@ interface ChatState {
 
 const useChatStore = create<ChatState>()(
   devtools(
-    persist(
-      (set) => ({
-        userId: 'anonymous',
-        question: '',
-        files: [],
-        history: [],
-        setUserId: (userId: string) => set({ userId }),
-        addFile: (file: FileType) => set((state) => ({ files: [...state.files, file] })),
-        deleteFile: (name: string) =>
-          set((state) => ({ files: state.files.filter((file) => file.name !== name) })),
-        setQuestion: (question: string) => set({ question }),
-        setHistory: (history: Message[]) => set({ history }),
-        addToHistory: (message: Message) =>
-          set((state) => ({ history: [...state.history, message] })),
-      }),
-      { name: 'app-state' }
-    )
+    (set) => ({
+      userId: 'anonymous',
+      question: '',
+      files: [],
+      history: [],
+      setUserId: (userId: string) => set({ userId }),
+      addFile: (file: FileType) => set((state) => ({ files: [...state.files, file] })),
+      deleteFile: (name: string) =>
+        set((state) => ({ files: state.files.filter((file) => file.name !== name) })),
+      setQuestion: (question: string) => set({ question }),
+      setHistory: (history: Message[]) => set({ history }),
+      addToHistory: (message: Message) =>
+        set((state) => ({ history: [...state.history, message] })),
+    }),
+    { name: 'app-state' }
   )
 );
-
-// fix for hydration issue
-// https://dev.to/abdulsamad/how-to-use-zustands-persist-middleware-in-nextjs-4lb5
-export const useStore = <T, F>(
-  store: (callback: (state: T) => unknown) => unknown,
-  callback: (state: T) => F
-) => {
-  const result = store(callback) as F;
-  const [data, setData] = useState<F>();
-
-  useEffect(() => {
-    setData(result);
-  }, [result]);
-
-  return data;
-};
-
 export default useChatStore;

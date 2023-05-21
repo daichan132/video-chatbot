@@ -1,4 +1,3 @@
-import { useMutateAuth } from '@/hooks/useMutateAuth';
 import {
   Button,
   Container,
@@ -10,8 +9,9 @@ import {
   Anchor,
 } from '@mantine/core';
 import { FormEvent, useState } from 'react';
+import { useMutateAuth } from '../hooks/useMutateAuth';
 
-export const Auth = () => {
+export const LoginForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const { email, setEmail, password, setPassword, loginMutation, registerMutation } =
     useMutateAuth();
