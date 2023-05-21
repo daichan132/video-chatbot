@@ -24,11 +24,10 @@ frontend で使用しているライブラリは[yarn](https://yarnpkg.com/)を�
    yarn install
    ```
 3. supabaseの設定を完了する
-   ,env.localに以下の環境変数を設定する。api keyが必要なときは言ってくれればOK。
+   
+   以下のコマンドを実行し、各環境変数に値を入れる。api keyが必要なときは言ってくれればOK。
    ```zsh
-   NEXT_PUBLIC_SUPABASE_URL=
-   NEXT_PUBLIC_SUPABASE_API_KEY=
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=
+   cp .env.local.template .env.local
    ```
 4. Nextjsで実装したfrontendを立ち上げる
    ```zsh
