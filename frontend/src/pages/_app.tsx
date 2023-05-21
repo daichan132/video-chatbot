@@ -2,9 +2,7 @@
 import type { AppProps } from 'next/app';
 import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core';
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { supabase } from '@/utils/supabase';
+import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
@@ -13,6 +11,7 @@ const queryClient = new QueryClient({
     queries: {
       retry: false,
       refetchOnWindowFocus: false,
+      suspense: true,
     },
   },
 });
@@ -21,30 +20,6 @@ const App = ({ Component, pageProps }: AppProps) => {
   const [colorScheme, setColorScheme] = useState<ColorScheme>('light');
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
-
-  const { push, pathname } = useRouter();
-
-  supabase.auth.onAuthStateChange((event) => {
-    if (event === 'SIGNED_IN' && pathname === '/') {
-      push('/');
-    }
-    if (event === 'SIGNED_OUT') {
-      push('/login');
-    }
-  });
-  useEffect(() => {
-    const validateSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (session?.user && pathname === '/login') {
-        push('/');
-      } else if (!session?.user && pathname !== '/login') {
-        await push('/login');
-      }
-    };
-    validateSession();
-  }, [pathname, push]);
 
   return (
     <>

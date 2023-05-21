@@ -11,7 +11,7 @@ import {
 } from '@mantine/core';
 import { FormEvent, useState } from 'react';
 
-const Home = () => {
+export const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const { email, setEmail, password, setPassword, loginMutation, registerMutation } =
     useMutateAuth();
@@ -66,5 +66,3 @@ const Home = () => {
     </Container>
   );
 };
-
-export default Home;

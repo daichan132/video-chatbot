@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-alert */
 import { useState } from 'react';
 import { useMutation } from 'react-query';
 import { supabase } from '../utils/supabase';
