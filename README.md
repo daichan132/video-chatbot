@@ -23,7 +23,14 @@ frontend で使用しているライブラリは[yarn](https://yarnpkg.com/)を�
    ```zsh
    yarn install
    ```
-3. Nextjsで実装したfrontendを立ち上げる
+3. supabaseの設定を完了する
+   ,env.localに以下の環境変数を設定する。api keyが必要なときは言ってくれればOK。
+   ```zsh
+   NEXT_PUBLIC_SUPABASE_URL=
+   NEXT_PUBLIC_SUPABASE_API_KEY=
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=
+   ```
+4. Nextjsで実装したfrontendを立ち上げる
    ```zsh
    yarn dev
    ```
