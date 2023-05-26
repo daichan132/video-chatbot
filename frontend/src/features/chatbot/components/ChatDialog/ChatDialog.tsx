@@ -9,7 +9,7 @@ export type ChatDialogProps = { messages: Message[] };
 export const ChatDialog: FC<ChatDialogProps> = ({ messages }) => {
   return (
     <ScrollArea
-      h="100vh"
+      h="100%"
       type="scroll"
       styles={(theme) => ({
         scrollbar: {

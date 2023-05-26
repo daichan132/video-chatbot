@@ -8,6 +8,7 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { NextPage } from 'next';
 import useSupabaseStore from '@/stores/supabaseStore';
 import { supabase } from '@/utils/supabase';
+import router from 'next/router';
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: React.ReactElement) => React.ReactNode;
@@ -37,6 +38,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      if (session && router.asPath === '/') router.push(`/c`);
     });
   }, [setSession]);
 
@@ -49,7 +51,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-        <MantineProvider withGlobalStyles withNormalizeCSS>
+        <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
           <QueryClientProvider client={queryClient}>
             <Suspense fallback={<div />}>{getLayout(<Component {...pageProps} />)}</Suspense>
             <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />

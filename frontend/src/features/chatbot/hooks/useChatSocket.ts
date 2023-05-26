@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Message } from '../types';
 
-export const useChatSocket = (url: string) => {
+export const useChatSocket = (url: string, chatId: string) => {
   const [inputText, setInputText] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([{ speakerId: 0, text: 'Hello!' }]);
   const [loading, setLoading] = useState(false);

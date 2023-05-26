@@ -6,6 +6,7 @@ type ChatState = {
   messages: Tables['messages']['Row'][];
   updateMessages: (payload: Tables['messages']['Row'][]) => void;
   setChat: (payload: Tables['chats']['Row']) => void;
+  resetChat: () => void;
 } & Tables['chats']['Row'];
 
 const useChatStore = create<ChatState>()(
@@ -35,6 +36,7 @@ const useChatStore = create<ChatState>()(
           false,
           'setChat'
         ),
+      resetChat: () => set({}, false, 'resetChat'),
     }),
     { name: 'chat-state' }
   )

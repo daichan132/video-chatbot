@@ -31,8 +31,8 @@ export const Sidebar: FC = memo(function Sidebar() {
       >
         add chat
       </Button>
-      {isLoading && <Loader />}
       <Stack spacing={10} pt="md">
+        {isLoading && <Loader />}
         {Array.isArray(chats) &&
           chats?.map((chat) => (
             <Box key={chat.id} w="100%" sx={{ position: 'relative' }}>

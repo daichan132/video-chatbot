@@ -8,9 +8,7 @@ import {
   Title,
   Anchor,
 } from '@mantine/core';
-import { FormEvent, useEffect, useState } from 'react';
-import router from 'next/router';
-import useSupabaseStore from '@/stores/supabaseStore';
+import { FormEvent, useState } from 'react';
 import { useMutateAuth } from '../hooks/useMutateAuth';
 
 export const LoginForm = () => {
@@ -25,13 +23,6 @@ export const LoginForm = () => {
       registerMutation.mutate();
     }
   };
-  const session = useSupabaseStore((state) => state.session);
-
-  useEffect(() => {
-    if (session?.user) {
-      router.push(`/c`);
-    }
-  }, [session]);
   return (
     <Container size={420} my={40}>
       <Title

@@ -1,6 +1,6 @@
 import { Sidebar } from '@/features/chatbot';
 import { UserProfile } from '@/features/profile';
-import { Navbar, Stack } from '@mantine/core';
+import { Divider, Navbar, Stack } from '@mantine/core';
 
 export const CustomNavbar = () => {
   return (
@@ -8,6 +8,7 @@ export const CustomNavbar = () => {
       <Navbar.Section grow>
         <Sidebar />
       </Navbar.Section>
+      <Divider pb="xs" />
       <Navbar.Section>
         <Stack justify="center" spacing={0}>
           <UserProfile />
