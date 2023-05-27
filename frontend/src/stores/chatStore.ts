@@ -1,4 +1,4 @@
-import { Tables } from '@/types';
+import { Tables } from 'src/types/customSupabase';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 

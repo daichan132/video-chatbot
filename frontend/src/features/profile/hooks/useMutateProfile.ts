@@ -1,8 +1,8 @@
 /* eslint-disable no-alert */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQueryClient, useMutation } from 'react-query';
-import { Tables } from '@/types';
-import { supabase } from '@/utils/supabase';
+import { Tables } from 'src/types/customSupabase';
+import { supabase } from '@/lib/supabase';
 
 export const useMutateProfile = () => {
   const queryClient = useQueryClient();

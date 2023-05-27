@@ -1,4 +1,4 @@
-import useSupabaseStore from '@/stores/supabaseStore';
+import useSupabaseStore from 'src/stores/supabaseStore';
 import {
   Avatar,
   Modal,
@@ -13,7 +13,7 @@ import {
 } from '@mantine/core';
 import { useEffect, type FC } from 'react';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
-import { useDownloadUrl } from '@/hooks/useDownloadUrl';
+import { useDownloadUrl } from 'src/hooks/useDownloadUrl';
 import { TbMoonStars, TbSunLow } from 'react-icons/tb';
 import { useUploadAvatarImg } from '../../hooks/useUploadAvatarImg';
 import { useMutateProfile } from '../../hooks/useMutateProfile';

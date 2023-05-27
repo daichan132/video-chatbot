@@ -1,9 +1,9 @@
 /* eslint-disable no-alert */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQueryClient, useMutation } from 'react-query';
-import { supabase } from '@/utils/supabase';
-import useSupabaseStore from '@/stores/supabaseStore';
-import useChatStore from '@/stores/chatStore';
+import { supabase } from '@/lib/supabase';
+import useSupabaseStore from 'src/stores/supabaseStore';
+import useChatStore from 'src/stores/chatStore';
 import router from 'next/router';
 
 export const useMutateChat = () => {

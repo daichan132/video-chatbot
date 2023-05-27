@@ -4,7 +4,7 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { BsChatLeft, BsTrash } from 'react-icons/bs';
 import router from 'next/router';
 import { shallow } from 'zustand/shallow';
-import useChatStore from '@/stores/chatStore';
+import useChatStore from 'src/stores/chatStore';
 import { css } from '@emotion/react';
 import { useMutateChat } from '../hooks/useMutateChat';
 import { useQueryChats } from '../hooks/useQueryChats';

@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
-import { Tables } from '@/types';
-import { supabase } from '@/utils/supabase';
+import { Tables } from 'src/types/customSupabase';
+import { supabase } from '@/lib/supabase';
 
 export const useQueryChat = (chatId: string) => {
   const getChat = async (): Promise<Tables['chats']['Row']> => {

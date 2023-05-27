@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
-import useSupabaseStore from '@/stores/supabaseStore';
-import { Tables } from '@/types';
-import { supabase } from '@/utils/supabase';
+import useSupabaseStore from 'src/stores/supabaseStore';
+import { Tables } from 'src/types/customSupabase';
+import { supabase } from '@/lib/supabase';
 import { useMutateProfile } from './useMutateProfile';
 
 export const useQueryProfile = () => {

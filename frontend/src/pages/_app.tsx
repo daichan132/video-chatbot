@@ -6,8 +6,8 @@ import { Suspense, useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { NextPage } from 'next';
-import useSupabaseStore from '@/stores/supabaseStore';
-import { supabase } from '@/utils/supabase';
+import useSupabaseStore from 'src/stores/supabaseStore';
+import { supabase } from '@/lib/supabase';
 import router from 'next/router';
 
 type NextPageWithLayout = NextPage & {

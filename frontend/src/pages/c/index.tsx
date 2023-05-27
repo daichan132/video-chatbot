@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { createGetLayout } from '@/components/layout';
+import { createGetLayout } from 'src/components/layout';
 
 const ChatPage = () => {
   return <div>{/* <Chatbot /> */}</div>;

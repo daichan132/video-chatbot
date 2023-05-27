@@ -1,12 +1,12 @@
 import { type FC } from 'react';
 import { Loader, Menu } from '@mantine/core';
-import { supabase } from '@/utils/supabase';
+import { supabase } from '@/lib/supabase';
 import { IoLogOutOutline, IoSettingsOutline } from 'react-icons/io5';
 import { useDisclosure } from '@mantine/hooks';
-import useSupabaseStore from '@/stores/supabaseStore';
+import useSupabaseStore from 'src/stores/supabaseStore';
 import { useQueryClient } from 'react-query';
-import { useDownloadUrl } from '@/hooks/useDownloadUrl';
-import useChatStore from '@/stores/chatStore';
+import { useDownloadUrl } from 'src/hooks/useDownloadUrl';
+import useChatStore from 'src/stores/chatStore';
 import router from 'next/router';
 import { useQueryProfile } from '../hooks/useQueryProfile';
 import { UserButton } from '../components/UserButton';

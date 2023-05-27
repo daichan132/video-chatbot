@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import useSupabaseStore from '@/stores/supabaseStore';
-import { supabase } from '../utils/supabase';
+import useSupabaseStore from 'src/stores/supabaseStore';
+import { supabase } from '../lib/supabase';
 
 export const useDownloadUrl = (filePath: string | null, key: 'avatars' | 'posts') => {
   const session = useSupabaseStore((state) => state.session);

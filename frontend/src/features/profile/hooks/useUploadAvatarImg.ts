@@ -1,8 +1,8 @@
 /* eslint-disable no-alert */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation } from 'react-query';
-import useSupabaseStore from '@/stores/supabaseStore';
-import { supabase } from '@/utils/supabase';
+import useSupabaseStore from 'src/stores/supabaseStore';
+import { supabase } from '@/lib/supabase';
 import { FileWithPath } from '@mantine/dropzone';
 
 export const useUploadAvatarImg = () => {

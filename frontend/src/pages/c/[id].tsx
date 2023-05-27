@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { Chatbot, useQueryChat, useQueryMessages } from '@/features/chatbot';
+import { Chatbot, useQueryChat, useQueryMessages } from 'src/features/chatbot';
 import { useRouter } from 'next/router';
-import { createGetLayout } from '@/components/layout';
+import { createGetLayout } from 'src/components/layout';
 import { Loader } from '@mantine/core';
 import { useEffect } from 'react';
-import useChatStore from '@/stores/chatStore';
+import useChatStore from 'src/stores/chatStore';
 
 const ChatPage = () => {
   const router = useRouter();

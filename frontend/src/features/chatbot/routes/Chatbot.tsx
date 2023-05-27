@@ -1,5 +1,5 @@
 import { createStyles } from '@mantine/core';
-import { Tables } from '@/types';
+import { Tables } from 'src/types/customSupabase';
 import { useChatSocket } from '../hooks/useChatSocket';
 import { ChatDialog } from '../components/ChatDialog';
 import { ChatTextInput } from '../components/ChatTextInput';

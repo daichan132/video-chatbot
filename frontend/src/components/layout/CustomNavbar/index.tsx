@@ -1,5 +1,5 @@
-import { Sidebar } from '@/features/chatbot';
-import { UserProfile } from '@/features/profile';
+import { Sidebar } from 'src/features/chatbot';
+import { UserProfile } from 'src/features/profile';
 import { Divider, Navbar, Stack } from '@mantine/core';
 
 export const CustomNavbar = () => {

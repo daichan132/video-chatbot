@@ -1,5 +1,5 @@
 /* eslint-disable no-shadow */
-import { LoginForm } from '@/features/auth';
+import { LoginForm } from 'src/features/auth';
 
 const Home = () => {
   return (
