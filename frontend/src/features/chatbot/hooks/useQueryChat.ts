@@ -1,8 +1,13 @@
 import { useQuery } from 'react-query';
 import { Tables } from 'src/types/customSupabase';
 import { supabase } from '@/lib/supabase';
+import { useEffect } from 'react';
+import { shallow } from 'zustand/shallow';
+import useChatStore from '../store/chatStore';
 
 export const useQueryChat = (chatId: string) => {
+  const setChat = useChatStore((state) => state.setChat, shallow);
+
   const getChat = async (): Promise<Tables['chats']['Row']> => {
     const { data, error, status } = await supabase
       .from('chats')
@@ -15,9 +20,16 @@ export const useQueryChat = (chatId: string) => {
     return data as Tables['chats']['Row'];
   };
 
-  return useQuery<Tables['chats']['Row'], Error>({
+  const queryInstance = useQuery<Tables['chats']['Row'], Error>({
     queryKey: [`chat-${chatId}`],
     queryFn: getChat,
     staleTime: Infinity,
   });
+  useEffect(() => {
+    if (queryInstance.data) {
+      setChat(queryInstance.data);
+    }
+  }, [queryInstance.data, setChat]);
+
+  return queryInstance;
 };

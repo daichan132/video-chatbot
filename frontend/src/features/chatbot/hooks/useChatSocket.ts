@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Message } from '../types';
+import { Tables } from '@/types/customSupabase';
 
-export const useChatSocket = (url: string, chatId: string) => {
+export const useChatSocket = (url: string) => {
   const [inputText, setInputText] = useState<string>('');
-  const [messages, setMessages] = useState<Message[]>([{ speakerId: 0, text: 'Hello!' }]);
+  const [messages, setMessages] = useState<Tables['messages']['Row'][]>([]);
   const [loading, setLoading] = useState(false);
 
   const addMessage = useCallback(
     (speakerId: number, text: string) => {
-      setMessages((ms) => [...ms, { speakerId, text }]);
+      // setMessages((ms) => [...ms, { speakerId, text }]);
     },
     [setMessages]
   );
@@ -31,7 +31,7 @@ export const useChatSocket = (url: string, chatId: string) => {
     };
   }, [addMessage, url]);
   const onSubmit = useCallback(() => {
-    setMessages((ms) => [...ms, { speakerId: 1, text: inputText }]);
+    // setMessages((ms) => [...ms, { speakerId: 1, text: inputText }]);
     socketRef.current?.send(inputText);
     setInputText('');
     setLoading(true);

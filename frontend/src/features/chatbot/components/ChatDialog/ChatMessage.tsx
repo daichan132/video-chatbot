@@ -3,18 +3,18 @@ import { Flex, ThemeIcon, createStyles } from '@mantine/core';
 import { FaGithub } from 'react-icons/fa';
 import { AiOutlineUser } from 'react-icons/ai';
 import ReactMarkdown from 'react-markdown';
-import { Message } from '../../types';
+import { Tables } from '@/types/customSupabase';
 
-const useStyles = createStyles((theme, speakerId: number) => ({
+const useStyles = createStyles((theme, role: string) => ({
   container: {
     width: '100%',
     backgroundColor:
       // eslint-disable-next-line no-nested-ternary
       theme.colorScheme === 'dark'
-        ? speakerId
+        ? role === 'system'
           ? theme.colors.gray[8]
           : theme.colors.gray[9]
-        : speakerId
+        : role === 'system'
         ? theme.colors.gray[0]
         : theme.colors.gray[1],
     padding: '12px 16px',
@@ -28,16 +28,16 @@ const useStyles = createStyles((theme, speakerId: number) => ({
   text: {},
 }));
 
-export const ChatMessage = ({ message }: { message: Message }) => {
-  const { classes } = useStyles(message.speakerId);
+export const ChatMessage = ({ message }: { message: Tables['messages']['Row'] }) => {
+  const { classes } = useStyles(message.role || '');
   return (
     <div className={classes.container}>
       <Flex gap="sm" wrap="nowrap" className={classes.flexWrapper}>
         <ThemeIcon size="lg" variant="default" className={classes.icon}>
-          {message.speakerId ? <AiOutlineUser /> : <FaGithub />}
+          {message.role ? <AiOutlineUser /> : <FaGithub />}
         </ThemeIcon>
         <div className={classes.text}>
-          <ReactMarkdown>{message.text}</ReactMarkdown>
+          <ReactMarkdown>{message.content || ''}</ReactMarkdown>
         </div>
       </Flex>
     </div>

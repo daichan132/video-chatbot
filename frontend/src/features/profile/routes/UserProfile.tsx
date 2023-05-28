@@ -4,16 +4,14 @@ import { supabase } from '@/lib/supabase';
 import { IoLogOutOutline, IoSettingsOutline } from 'react-icons/io5';
 import { useDisclosure } from '@mantine/hooks';
 import useSupabaseStore from 'src/stores/supabaseStore';
-import { useQueryClient } from 'react-query';
+import { QueryCache } from 'react-query';
 import { useDownloadUrl } from 'src/hooks/useDownloadUrl';
-import useChatStore from 'src/stores/chatStore';
 import router from 'next/router';
 import { useQueryProfile } from '../hooks/useQueryProfile';
 import { UserButton } from '../components/UserButton';
 import { SettingsModal } from '../components/SettingsModal';
 
 export const UserProfile: FC = () => {
-  const queryClient = useQueryClient();
   const { data: profile, refetch, isLoading: isLoadingProfile } = useQueryProfile();
   const { fullUrl: avatarUrl, isLoading: isLoadingDownload } = useDownloadUrl(
     profile?.avatar_url || null,
@@ -21,15 +19,12 @@ export const UserProfile: FC = () => {
   );
 
   const resetProfile = useSupabaseStore((state) => state.resetEditedProfile);
-  const resetChat = useChatStore((state) => state.resetChat);
-
-  const signOut = () => {
+  const queryCache = new QueryCache();
+  const signOut = async () => {
     resetProfile();
-    resetChat();
-    supabase.auth.signOut();
-    queryClient.removeQueries('profile');
-    queryClient.removeQueries('messages');
-    router.push('/');
+    queryCache.clear();
+    await supabase.auth.signOut();
+    router.reload();
   };
   const [opened, { open, close }] = useDisclosure(false);
 
@@ -38,13 +33,11 @@ export const UserProfile: FC = () => {
       <Menu shadow="md" width={200}>
         <Menu.Target>
           <div>
-            {isLoadingDownload ||
-              isLoadingProfile ||
-              (!(avatarUrl && profile?.username) ? (
-                <Loader />
-              ) : (
-                <UserButton image={avatarUrl} name={profile.username} />
-              ))}
+            {isLoadingDownload || isLoadingProfile || !avatarUrl || !profile?.username ? (
+              <Loader />
+            ) : (
+              <UserButton image={avatarUrl} name={profile.username} />
+            )}
           </div>
         </Menu.Target>
 

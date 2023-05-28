@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useMutation } from 'react-query';
 import { supabase } from '@/lib/supabase';
+import router from 'next/router';
 
 export const useMutateAuth = () => {
   const [email, setEmail] = useState('');
@@ -15,6 +16,7 @@ export const useMutateAuth = () => {
     async () => {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw new Error(error.message);
+      router.push('/c');
     },
     {
       onError: (err: any) => {
@@ -27,6 +29,7 @@ export const useMutateAuth = () => {
     async () => {
       const { error } = await supabase.auth.signUp({ email, password });
       if (error) throw new Error(error.message);
+      router.push('/c');
     },
     {
       onError: (err: any) => {

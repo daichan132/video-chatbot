@@ -1,10 +1,10 @@
 import { Box, ScrollArea, Stack } from '@mantine/core';
 import { type FC } from 'react';
 import React from 'react';
+import { Tables } from '@/types/customSupabase';
 import { ChatMessage } from './ChatMessage';
-import { Message } from '../../types';
 
-export type ChatDialogProps = { messages: Message[] };
+export type ChatDialogProps = { messages: Tables['messages']['Row'][] };
 
 export const ChatDialog: FC<ChatDialogProps> = ({ messages }) => {
   return (
@@ -26,7 +26,7 @@ export const ChatDialog: FC<ChatDialogProps> = ({ messages }) => {
         {messages.map((message, i) => (
           <React.Fragment
             // eslint-disable-next-line react/no-array-index-key
-            key={`${message.text}-${i}`}
+            key={`${message.id}-${message.content}-${i}`}
           >
             <ChatMessage message={message} />
           </React.Fragment>

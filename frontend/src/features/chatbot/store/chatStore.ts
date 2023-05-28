@@ -1,10 +1,10 @@
-import { Tables } from 'src/types/customSupabase';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
+import { Tables } from '@/types/customSupabase';
 
 type ChatState = {
   messages: Tables['messages']['Row'][];
-  updateMessages: (payload: Tables['messages']['Row'][]) => void;
+  setMessages: (payload: Tables['messages']['Row']) => void;
   setChat: (payload: Tables['chats']['Row']) => void;
   resetChat: () => void;
 } & Tables['chats']['Row'];
@@ -20,11 +20,11 @@ const useChatStore = create<ChatState>()(
       owner: null,
       system_prompt: null,
       messages: [],
-      updateMessages: (payload) =>
+      setMessages: (payload) =>
         set(
-          {
-            messages: payload,
-          },
+          (prev) => ({
+            messages: [...prev.messages, payload],
+          }),
           false,
           'updateMeaages'
         ),

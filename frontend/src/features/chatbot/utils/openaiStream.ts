@@ -1,5 +1,5 @@
-import { OpenAIStreamPayload } from '@/types/openai';
 import { createParser, ParsedEvent, ReconnectInterval } from 'eventsource-parser';
+import { OpenAIStreamPayload } from '../types/openai';
 
 export async function OpenAIStream(payload: OpenAIStreamPayload) {
   const encoder = new TextEncoder();

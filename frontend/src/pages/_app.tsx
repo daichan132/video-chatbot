@@ -2,13 +2,12 @@
 import { AppProps } from 'next/app';
 import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core';
 import Head from 'next/head';
-import { Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { NextPage } from 'next';
 import useSupabaseStore from 'src/stores/supabaseStore';
 import { supabase } from '@/lib/supabase';
-import router from 'next/router';
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: React.ReactElement) => React.ReactNode;
@@ -23,7 +22,6 @@ const queryClient = new QueryClient({
     queries: {
       retry: false,
       refetchOnWindowFocus: false,
-      suspense: true,
     },
   },
 });
@@ -38,7 +36,6 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
-      if (session && router.asPath === '/') router.push(`/c`);
     });
   }, [setSession]);
 
@@ -53,7 +50,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
       <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
         <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
           <QueryClientProvider client={queryClient}>
-            <Suspense fallback={<div />}>{getLayout(<Component {...pageProps} />)}</Suspense>
+            {getLayout(<Component {...pageProps} />)}
             <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
           </QueryClientProvider>
         </MantineProvider>

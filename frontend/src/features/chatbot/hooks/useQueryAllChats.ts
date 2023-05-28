@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 import { Tables } from 'src/types/customSupabase';
 import { supabase } from '@/lib/supabase';
 
-export const useQueryChats = () => {
+export const useQueryAllChats = () => {
   const getChats = async (): Promise<Tables['chats']['Row'][]> => {
     const { data, error, status } = await supabase
       .from('chats')

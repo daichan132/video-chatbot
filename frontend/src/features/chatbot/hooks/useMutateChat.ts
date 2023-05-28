@@ -3,8 +3,8 @@
 import { useQueryClient, useMutation } from 'react-query';
 import { supabase } from '@/lib/supabase';
 import useSupabaseStore from 'src/stores/supabaseStore';
-import useChatStore from 'src/stores/chatStore';
 import router from 'next/router';
+import useChatStore from '../store/chatStore';
 
 export const useMutateChat = () => {
   const queryClient = useQueryClient();

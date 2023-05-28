@@ -4,21 +4,18 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { BsChatLeft, BsTrash } from 'react-icons/bs';
 import router from 'next/router';
 import { shallow } from 'zustand/shallow';
-import useChatStore from 'src/stores/chatStore';
 import { css } from '@emotion/react';
 import { useMutateChat } from '../hooks/useMutateChat';
-import { useQueryChats } from '../hooks/useQueryChats';
+import { useQueryAllChats } from '../hooks/useQueryAllChats';
+import useChatStore from '../store/chatStore';
 
 export const Sidebar: FC = memo(function Sidebar() {
   const id = useChatStore((state) => state.id, shallow);
   const { addChatMutation, deleteChatMutation } = useMutateChat();
-  const { data: chats, isLoading, refetch } = useQueryChats();
+  const { data: chats, isLoading, refetch } = useQueryAllChats();
   useEffect(() => {
-    refetch();
-  }, [id, refetch]);
-  useEffect(() => {
-    if (deleteChatMutation.isSuccess) refetch();
-  }, [deleteChatMutation.isSuccess, refetch]);
+    if (deleteChatMutation.isSuccess || addChatMutation.isSuccess) refetch();
+  }, [deleteChatMutation.isSuccess, addChatMutation, refetch]);
   return (
     <Stack>
       <Button
