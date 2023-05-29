@@ -1,5 +1,5 @@
-import { memo, type FC, useEffect } from 'react';
-import { ActionIcon, Box, Button, Flex, Loader, Stack, Text } from '@mantine/core';
+import { type FC, useEffect } from 'react';
+import { ActionIcon, Box, Button, Center, Flex, Loader, Stack, Text } from '@mantine/core';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { BsChatLeft, BsTrash } from 'react-icons/bs';
 import router from 'next/router';
@@ -9,13 +9,13 @@ import { useMutateChat } from '../hooks/useMutateChat';
 import { useQueryAllChats } from '../hooks/useQueryAllChats';
 import useChatStore from '../store/chatStore';
 
-export const Sidebar: FC = memo(function Sidebar() {
+export const Sidebar: FC = () => {
   const id = useChatStore((state) => state.id, shallow);
   const { addChatMutation, deleteChatMutation } = useMutateChat();
   const { data: chats, isLoading, refetch } = useQueryAllChats();
   useEffect(() => {
     if (deleteChatMutation.isSuccess || addChatMutation.isSuccess) refetch();
-  }, [deleteChatMutation.isSuccess, addChatMutation, refetch]);
+  }, [deleteChatMutation.isSuccess, addChatMutation.isSuccess, refetch]);
   return (
     <Stack>
       <Button
@@ -29,7 +29,11 @@ export const Sidebar: FC = memo(function Sidebar() {
         add chat
       </Button>
       <Stack spacing={10} pt="md">
-        {isLoading && <Loader />}
+        {isLoading && (
+          <Center h="100%">
+            <Loader color="gray" size="sm" />
+          </Center>
+        )}
         {Array.isArray(chats) &&
           chats?.map((chat) => (
             <Box key={chat.id} w="100%" sx={{ position: 'relative' }}>
@@ -67,4 +71,4 @@ export const Sidebar: FC = memo(function Sidebar() {
       </Stack>
     </Stack>
   );
-});
+};

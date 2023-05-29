@@ -2,7 +2,6 @@
 import { Chatbot, useQueryChat, useQueryMessages } from 'src/features/chatbot';
 import { useRouter } from 'next/router';
 import { createGetLayout } from 'src/components/layout';
-import { Loader } from '@mantine/core';
 
 const ChatPage = () => {
   const router = useRouter();
@@ -13,7 +12,13 @@ const ChatPage = () => {
 
   return (
     <div>
-      {isChatLoading || isMessagesLoading || !currentChat || !messages ? <Loader /> : <Chatbot />}
+      {isChatLoading || isMessagesLoading || !currentChat || !messages ? (
+        <div />
+      ) : (
+        <div key={currentChat.id}>
+          <Chatbot currentChat={currentChat} initialMessages={messages} />
+        </div>
+      )}
     </div>
   );
 };

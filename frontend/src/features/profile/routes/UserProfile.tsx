@@ -1,5 +1,5 @@
 import { type FC } from 'react';
-import { Loader, Menu } from '@mantine/core';
+import { Box, Center, Loader, Menu } from '@mantine/core';
 import { supabase } from '@/lib/supabase';
 import { IoLogOutOutline, IoSettingsOutline } from 'react-icons/io5';
 import { useDisclosure } from '@mantine/hooks';
@@ -32,13 +32,15 @@ export const UserProfile: FC = () => {
     <>
       <Menu shadow="md" width={200}>
         <Menu.Target>
-          <div>
+          <Box h={50}>
             {isLoadingDownload || isLoadingProfile || !avatarUrl || !profile?.username ? (
-              <Loader />
+              <Center h="100%">
+                <Loader color="gray" size="sm" />
+              </Center>
             ) : (
               <UserButton image={avatarUrl} name={profile.username} />
             )}
-          </div>
+          </Box>
         </Menu.Target>
 
         <Menu.Dropdown>

@@ -15,8 +15,8 @@ const useStyles = createStyles((theme, role: string) => ({
           ? theme.colors.gray[8]
           : theme.colors.gray[9]
         : role === 'system'
-        ? theme.colors.gray[0]
-        : theme.colors.gray[1],
+        ? theme.colors.gray[1]
+        : theme.colors.white,
     padding: '12px 16px',
     borderBottom:
       theme.colorScheme === 'dark'
@@ -24,7 +24,7 @@ const useStyles = createStyles((theme, role: string) => ({
         : `1px solid ${theme.colors.gray[2]}`,
   },
   flexWrapper: { maxWidth: 800, margin: '0 auto' },
-  icon: { transform: 'translate(0, 30%)' },
+  icon: { transform: 'translate(0, 40%)' },
   text: {},
 }));
 
@@ -34,7 +34,7 @@ export const ChatMessage = ({ message }: { message: Tables['messages']['Row'] })
     <div className={classes.container}>
       <Flex gap="sm" wrap="nowrap" className={classes.flexWrapper}>
         <ThemeIcon size="lg" variant="default" className={classes.icon}>
-          {message.role ? <AiOutlineUser /> : <FaGithub />}
+          {message.role === 'user' ? <AiOutlineUser /> : <FaGithub />}
         </ThemeIcon>
         <div className={classes.text}>
           <ReactMarkdown>{message.content || ''}</ReactMarkdown>
