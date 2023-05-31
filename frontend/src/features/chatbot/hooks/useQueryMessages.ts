@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 
 export const useQueryMessages = (chatId: string) => {
   const getMessages = async (): Promise<Tables['messages']['Row'][]> => {
+    if (!chatId) return [];
     const { data, error, status } = await supabase
       .from('messages')
       .select('*')

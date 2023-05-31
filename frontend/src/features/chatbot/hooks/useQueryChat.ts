@@ -9,6 +9,16 @@ export const useQueryChat = (chatId: string) => {
   const setChat = useChatStore((state) => state.setChat, shallow);
 
   const getChat = async (): Promise<Tables['chats']['Row']> => {
+    if (!chatId)
+      return {
+        id: '',
+        title: null,
+        advanced_settings: null,
+        created_at: null,
+        model: null,
+        owner: null,
+        system_prompt: null,
+      };
     const { data, error, status } = await supabase
       .from('chats')
       .select('*, messages(count)')

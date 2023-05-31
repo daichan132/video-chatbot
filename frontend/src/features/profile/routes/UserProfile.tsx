@@ -33,12 +33,12 @@ export const UserProfile: FC = () => {
       <Menu shadow="md" width={200}>
         <Menu.Target>
           <Box h={50}>
-            {isLoadingDownload || isLoadingProfile || !avatarUrl || !profile?.username ? (
+            {isLoadingDownload || isLoadingProfile ? (
               <Center h="100%">
                 <Loader color="gray" size="sm" />
               </Center>
             ) : (
-              <UserButton image={avatarUrl} name={profile.username} />
+              <UserButton image={avatarUrl} name={profile?.username || ''} />
             )}
           </Box>
         </Menu.Target>

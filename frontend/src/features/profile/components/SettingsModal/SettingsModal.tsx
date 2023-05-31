@@ -15,6 +15,7 @@ import { useEffect, type FC } from 'react';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { useDownloadUrl } from 'src/hooks/useDownloadUrl';
 import { TbMoonStars, TbSunLow } from 'react-icons/tb';
+import { useUser } from '@supabase/auth-helpers-react';
 import { useUploadAvatarImg } from '../../hooks/useUploadAvatarImg';
 import { useMutateProfile } from '../../hooks/useMutateProfile';
 
@@ -24,9 +25,9 @@ type SettingsModalType = {
   refetch: () => void;
 };
 export const SettingsModal: FC<SettingsModalType> = ({ opened, close, refetch }) => {
-  const session = useSupabaseStore((state) => state.session);
   const editedProfile = useSupabaseStore((state) => state.editedProfile);
   const { fullUrl: avatarUrl, isLoading } = useDownloadUrl(editedProfile.avatar_url, 'avatars');
+  const user = useUser();
 
   const { useMutateUploadAvatarImg } = useUploadAvatarImg();
   const { updateProfileMutation } = useMutateProfile();
@@ -34,7 +35,7 @@ export const SettingsModal: FC<SettingsModalType> = ({ opened, close, refetch })
   const update = useSupabaseStore((state) => state.updateEditedProfile);
   const updateProfile = () => {
     updateProfileMutation.mutate({
-      id: session?.user?.id,
+      id: user?.id,
       username: editedProfile.username,
       avatar_url: editedProfile.avatar_url,
     });
