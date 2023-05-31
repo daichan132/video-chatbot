@@ -1,67 +1,20 @@
-import {
-  Button,
-  Container,
-  Text,
-  Paper,
-  PasswordInput,
-  TextInput,
-  Title,
-  Anchor,
-} from '@mantine/core';
-import { FormEvent, useState } from 'react';
-import { useMutateAuth } from '../hooks/useMutateAuth';
+import { Container, Paper } from '@mantine/core';
+import { useEffect } from 'react';
+import { Auth } from '@supabase/auth-ui-react';
+import { supabase } from '@/lib/supabase';
+import { ThemeSupa } from '@supabase/auth-ui-shared';
+import router from 'next/router';
 
 export const LoginForm = () => {
-  const [isLogin, setIsLogin] = useState(true);
-  const { email, setEmail, password, setPassword, loginMutation, registerMutation } =
-    useMutateAuth();
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (isLogin) {
-      loginMutation.mutate();
-    } else {
-      registerMutation.mutate();
-    }
-  };
+  useEffect(() => {
+    supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) router.reload();
+    });
+  }, []);
   return (
     <Container size={420} my={40}>
-      <Title
-        align="center"
-        sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
-      >
-        Welcome back!
-      </Title>
-      <Text color="dimmed" size="sm" align="center" mt={5}>
-        {!isLogin ? 'Do you already have an account? ' : 'Do not have an account yet? '}
-        <Anchor size="sm" component="button" onClick={() => setIsLogin(!isLogin)}>
-          {!isLogin ? 'Login' : 'Sign up'}
-        </Anchor>
-      </Text>
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-        <form onSubmit={handleSubmit}>
-          <TextInput
-            label="Email"
-            placeholder="Your email"
-            required
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-          />
-          <PasswordInput
-            label="Password"
-            placeholder="Your password"
-            required
-            mt="md"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-          />
-          <Button fullWidth mt="xl" type="submit">
-            {isLogin ? 'Login' : 'Sign up'}
-          </Button>
-        </form>
+      <Paper withBorder shadow="md" py={20} px={30} mt={30} radius="md">
+        <Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} providers={[]} />
       </Paper>
     </Container>
   );

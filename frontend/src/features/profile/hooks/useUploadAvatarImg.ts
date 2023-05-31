@@ -4,9 +4,10 @@ import { useMutation } from 'react-query';
 import useSupabaseStore from 'src/stores/supabaseStore';
 import { supabase } from '@/lib/supabase';
 import { FileWithPath } from '@mantine/dropzone';
+import { useUser } from '@supabase/auth-helpers-react';
 
 export const useUploadAvatarImg = () => {
-  const session = useSupabaseStore((state) => state.session);
+  const user = useUser();
   const editedProfile = useSupabaseStore((state) => state.editedProfile);
   const updateProfile = useSupabaseStore((state) => state.updateEditedProfile);
   const useMutateUploadAvatarImg = useMutation(
@@ -20,7 +21,7 @@ export const useUploadAvatarImg = () => {
       const filePath = `${fileName}`;
       const { error } = await supabase.storage
         .from('avatars')
-        .upload(`${session?.user.id}/${filePath}`, file);
+        .upload(`${user?.id}/${filePath}`, file);
       if (error) throw new Error(error.message);
       updateProfile({ ...editedProfile, avatar_url: filePath });
     },
