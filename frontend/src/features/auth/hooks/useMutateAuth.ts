@@ -14,9 +14,13 @@ export const useMutateAuth = () => {
   };
   const loginMutation = useMutation(
     async () => {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
       if (error) throw new Error(error.message);
-      router.push('/c');
+      // router.push('/c');
+      router.reload();
     },
     {
       onError: (err: any) => {
@@ -27,9 +31,14 @@ export const useMutateAuth = () => {
   );
   const registerMutation = useMutation(
     async () => {
-      const { error } = await supabase.auth.signUp({ email, password });
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { emailRedirectTo: 'http://localhost:3000/api/auth/callback' },
+      });
       if (error) throw new Error(error.message);
-      router.push('/c');
+      // router.push('/c');
+      router.reload();
     },
     {
       onError: (err: any) => {
