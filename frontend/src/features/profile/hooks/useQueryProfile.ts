@@ -31,7 +31,7 @@ export const useQueryProfile = () => {
     return data as Tables['profiles']['Row'];
   };
   return useQuery<Tables['profiles']['Row'], Error>({
-    queryKey: [`profile`],
+    queryKey: [`profile-${user?.id}`],
     queryFn: getProfile,
     staleTime: Infinity,
     onSuccess: (data) => {
