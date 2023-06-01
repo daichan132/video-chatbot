@@ -1766,6 +1766,11 @@
   resolved "https://registry.yarnpkg.com/@mantine/utils/-/utils-6.0.11.tgz#03237be9bda3f671c7f9043a23d058d4e64cb72f"
   integrity sha512-ijkEAaKEhZCw7HSWsGMQZsvfmQKmJXmPoQ1LeEwcH3vjZalPk9pQjSPPfUdTeX9ZAv095XWmfVMiNV8+xvM0OQ==
 
+"@maverick-js/signals@^5.10.1":
+  version "5.10.2"
+  resolved "https://registry.yarnpkg.com/@maverick-js/signals/-/signals-5.10.2.tgz#cc86c61584859ff6704a2dc896a3d179865fe8cb"
+  integrity sha512-JEoTAsctQwKyL3RIfhqi8a1rVXvBnK7HBEIhrcOICjZ5zb2ignh6FHSa9rmShyoF7rKYd58javxfhFjKC6WCwQ==
+
 "@mdx-js/react@^2.1.5":
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/@mdx-js/react/-/react-2.3.0.tgz#4208bd6d70f0d0831def28ef28c26149b03180b3"
@@ -3488,6 +3493,11 @@
   dependencies:
     "@typescript-eslint/types" "5.59.5"
     eslint-visitor-keys "^3.3.0"
+
+"@vidstack/react@^0.5.6":
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/@vidstack/react/-/react-0.5.6.tgz#cd058a32661a20eb6c087bca61b68a8a7f0ffe62"
+  integrity sha512-BOdPaSEQc1zxfksVEj0gA29Kvj1LaOVDObNP3EyPs2cMj/TJsQASdELzNphCNzwSN9Zw+MtW4dTP0p5cBPnzPw==
 
 "@webassemblyjs/ast@1.11.6", "@webassemblyjs/ast@^1.11.5":
   version "1.11.6"
@@ -7621,6 +7631,14 @@ match-sorter@^6.0.2:
     "@babel/runtime" "^7.12.5"
     remove-accents "0.4.2"
 
+maverick.js@0.36.10:
+  version "0.36.10"
+  resolved "https://registry.yarnpkg.com/maverick.js/-/maverick.js-0.36.10.tgz#a19f4bddded63f0e57d9d0ab9a412245930a9867"
+  integrity sha512-DTojalMz70RYxX35bIxJrfvLSp5r8s/SP1u9vI8JRgUmVDSRcF2C0V7xQv6tXX7kXN7Kny6bYe2lrRthuZUtpA==
+  dependencies:
+    "@maverick-js/signals" "^5.10.1"
+    type-fest "^3.8.0"
+
 mdast-util-definitions@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/mdast-util-definitions/-/mdast-util-definitions-4.0.0.tgz#c5c1a84db799173b4dcf7643cda999e440c24db2"
@@ -7685,6 +7703,16 @@ mdn-data@2.0.14:
   version "2.0.14"
   resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-2.0.14.tgz#7113fc4281917d63ce29b43446f701e68c25ba50"
   integrity sha512-dn6wd0uw5GsdswPFfsgMp5NSB0/aDe6fK94YJV/AJDYXL6HVLWBsxeq7js7Ad+mU2K9LAlwpk6kN2D5mwCPVow==
+
+media-captions@0.0.13:
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/media-captions/-/media-captions-0.0.13.tgz#a30d8ef7314518e4691af6c6de8924d7b5176f70"
+  integrity sha512-arrPBL46F/fO6fH+OI4VTxdYP2o5/3kfoivBIBy9WywcXvgeYXYlTFXg/PA9hTyjr4uBHzv1RIHzFkVwOKMD2w==
+
+media-icons@0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/media-icons/-/media-icons-0.5.0.tgz#c191fb487e585fe6319784aff4d10ebda18a42f3"
+  integrity sha512-fFZdWufnwYbKwTwPm0/1xYnTamUBG5EddOy+p8yT7ITV1Vw2sDByCZecNOGG3ynrQVCOQ68Rg/L19aCIxG/K0g==
 
 media-typer@0.3.0:
   version "0.3.0"
@@ -10480,6 +10508,11 @@ type-fest@^2.19.0:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-2.19.0.tgz#88068015bb33036a598b952e55e9311a60fd3a9b"
   integrity sha512-RAH822pAdBgcNMAfWnCBU3CFZcfZ/i1eZjwFU/dsLKumyuuP3niueg2UAukXYF0E2AAoc82ZSSf9J0WQBinzHA==
 
+type-fest@^3.8.0:
+  version "3.11.1"
+  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-3.11.1.tgz#d8e62c7f42e14537d5b8796de5450d541f3a33a7"
+  integrity sha512-aCuRNRERRVh33lgQaJRlUxZqzfhzwTrsE98Mc3o3VXqmiaQdHacgUtJ0esp+7MvZ92qhtzKPeusaX6vIEcoreA==
+
 type-is@~1.6.18:
   version "1.6.18"
   resolved "https://registry.yarnpkg.com/type-is/-/type-is-1.6.18.tgz#4e552cd05df09467dcbc4ef739de89f2cf37c131"
@@ -10843,6 +10876,16 @@ vfile@^5.0.0:
     is-buffer "^2.0.0"
     unist-util-stringify-position "^3.0.0"
     vfile-message "^3.0.0"
+
+vidstack@^0.5.6:
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/vidstack/-/vidstack-0.5.6.tgz#d3717ae9dcc0885ad9ba6897377f1ccea54dce8f"
+  integrity sha512-fcina0fTOMLldwJrrYoCpAZEs6vrWcS3cbEvduOKAydfU/VykNq9c8zms9HoT3Sl/PRF0t7BCzRo7P8eNdT/0w==
+  dependencies:
+    maverick.js "0.36.10"
+    media-captions "0.0.13"
+    media-icons "0.5.0"
+    type-fest "^3.8.0"
 
 walker@^1.0.8:
   version "1.0.8"
