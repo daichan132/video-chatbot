@@ -1,1 +1,1 @@
-export * from './routes/VideoPlayer';
+export * from './routes';
