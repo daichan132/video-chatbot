@@ -201,6 +201,7 @@ export interface Database {
           match_threshold: number;
           match_count: number;
           min_content_length: number;
+          page_id_in: number;
         };
         Returns: {
           id: number;
