@@ -83,6 +83,73 @@ export interface Database {
           role?: string | null;
         };
       };
+      nods_page: {
+        Row: {
+          chat: string | null;
+          checksum: string | null;
+          id: number;
+          meta: Json | null;
+          owner: string | null;
+          path: string;
+          source: string | null;
+          type: string | null;
+          video_url: string | null;
+        };
+        Insert: {
+          chat?: string | null;
+          checksum?: string | null;
+          id?: number;
+          meta?: Json | null;
+          owner?: string | null;
+          path: string;
+          source?: string | null;
+          type?: string | null;
+          video_url?: string | null;
+        };
+        Update: {
+          chat?: string | null;
+          checksum?: string | null;
+          id?: number;
+          meta?: Json | null;
+          owner?: string | null;
+          path?: string;
+          source?: string | null;
+          type?: string | null;
+          video_url?: string | null;
+        };
+      };
+      nods_page_section: {
+        Row: {
+          content: string | null;
+          embedding: string | null;
+          heading: string | null;
+          id: number;
+          owner: string | null;
+          page_id: number;
+          slug: string | null;
+          token_count: number | null;
+        };
+        Insert: {
+          content?: string | null;
+          embedding?: string | null;
+          heading?: string | null;
+          id?: number;
+          owner?: string | null;
+          page_id: number;
+          slug?: string | null;
+          token_count?: number | null;
+        };
+        Update: {
+          content?: string | null;
+          embedding?: string | null;
+          heading?: string | null;
+          id?: number;
+          owner?: string | null;
+          page_id?: number;
+          slug?: string | null;
+          token_count?: number | null;
+        };
+      };
       profiles: {
         Row: {
           avatar_url: string | null;
