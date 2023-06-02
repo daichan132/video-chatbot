@@ -23,34 +23,23 @@ export const config = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const fileContent: any = await new Promise((resolve, reject) => {
+    const fileContent = await new Promise((resolve, reject) => {
       form.parse(req, (err, _fields, files) => {
         if (isFile(files.file)) {
-          // resolve(fs.createReadStream(files.file.filepath));
-          // const f = files.file;
-          console.log(files.file);
-          // console.log(f);
-          resolve(files.file);
+          resolve(fs.createReadStream(files.file.filepath));
         }
-
         return reject(new Error('file is not found'));
       });
     });
 
-    // Whisper
-    // console.log(fileContent);
-    // console.log(typeof fileContent);
-    // console.log(fileContent);
-    // const response = await openai.createTranscription(fileContent, 'whisper-1');
-    // const response = await openai.createTranscription(
-    //   new File('/var/folders/qh/4v6m95511ysdflt2psgnw87r0000gp/T/85113ce6111a1e374b3b6460a.mp3'),
-    //   'whisper-1'
-    // );
-    const response = await openai.createTranscription(fileContent, 'whisper-1');
-    // console.log(response);
-
-    const transcript = response.data.text;
-
+    const response = await openai.createTranscription(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      fileContent as any,
+      'whisper-1',
+      'prompt',
+      'srt'
+    );
+    const transcript = response.data;
     res.status(200).json({ transcript });
   } catch (error) {
     // console.error(error);
