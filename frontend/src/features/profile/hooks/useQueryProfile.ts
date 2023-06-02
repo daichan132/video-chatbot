@@ -2,26 +2,27 @@ import { useQuery } from 'react-query';
 import useSupabaseStore from 'src/stores/supabaseStore';
 import { Tables } from 'src/types/customSupabase';
 import { supabase } from '@/lib/supabase';
+import { useUser } from '@supabase/auth-helpers-react';
 import { useMutateProfile } from './useMutateProfile';
 
 export const useQueryProfile = () => {
-  const session = useSupabaseStore((state) => state.session);
   const editedProfile = useSupabaseStore((state) => state.editedProfile);
   const update = useSupabaseStore((state) => state.updateEditedProfile);
   const { createProfileMutation } = useMutateProfile();
+  const user = useUser();
   const getProfile = async (): Promise<Tables['profiles']['Row']> => {
     const { data, error, status } = await supabase.from('profiles').select('*').single();
     if (error && status === 406) {
-      if (session?.user) {
+      if (user) {
         createProfileMutation.mutate({
-          id: session?.user.id,
-          username: session?.user?.email?.match(/(.*)@/)?.[1],
+          id: user.id,
+          username: user?.email?.match(/(.*)@/)?.[1],
           avatar_url: '',
         });
       }
       update({
         ...editedProfile,
-        username: session?.user.email || null,
+        username: user?.email || null,
       });
     }
     if (error && status !== 406) {
@@ -30,7 +31,7 @@ export const useQueryProfile = () => {
     return data as Tables['profiles']['Row'];
   };
   return useQuery<Tables['profiles']['Row'], Error>({
-    queryKey: ['profile'],
+    queryKey: [`profile-${user?.id}`],
     queryFn: getProfile,
     staleTime: Infinity,
     onSuccess: (data) => {

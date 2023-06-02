@@ -2,12 +2,12 @@
 import { AppProps } from 'next/app';
 import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core';
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { NextPage } from 'next';
-import useSupabaseStore from 'src/stores/supabaseStore';
-import { supabase } from '@/lib/supabase';
+import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs';
+import { SessionContextProvider } from '@supabase/auth-helpers-react';
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: React.ReactElement) => React.ReactNode;
@@ -32,12 +32,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
 
-  const setSession = useSupabaseStore((state) => state.setSession);
-  useEffect(() => {
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-  }, [setSession]);
+  const [supabaseClient] = useState(() => createPagesBrowserClient());
 
   return (
     <>
@@ -50,7 +45,12 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
       <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
         <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
           <QueryClientProvider client={queryClient}>
-            {getLayout(<Component {...pageProps} />)}
+            <SessionContextProvider
+              supabaseClient={supabaseClient}
+              initialSession={pageProps.initialSession}
+            >
+              {getLayout(<Component {...pageProps} />)}
+            </SessionContextProvider>
             <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
           </QueryClientProvider>
         </MantineProvider>
@@ -58,5 +58,4 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
     </>
   );
 };
-App.getInitialProps = async () => ({ pageProps: {} });
 export default App;

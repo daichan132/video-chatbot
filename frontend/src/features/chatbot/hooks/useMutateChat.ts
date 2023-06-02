@@ -2,23 +2,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQueryClient, useMutation } from 'react-query';
 import { supabase } from '@/lib/supabase';
-import useSupabaseStore from 'src/stores/supabaseStore';
 import router from 'next/router';
+import { useUser } from '@supabase/auth-helpers-react';
 import useChatStore from '../store/chatStore';
 
 export const useMutateChat = () => {
   const queryClient = useQueryClient();
-  const session = useSupabaseStore((state) => state.session);
   const model = useChatStore((state) => state.model);
   const system_prompt = useChatStore((state) => state.system_prompt);
   const advanced_settings = useChatStore((state) => state.advanced_settings);
+  const user = useUser();
 
   const addChatMutation = useMutation(
     async () => {
       const { data, error } = await supabase
         .from('chats')
         .insert({
-          owner: session?.user.id,
+          owner: user?.id,
           model,
           system_prompt,
           advanced_settings: JSON.stringify(advanced_settings),

@@ -17,7 +17,6 @@ const useChatStore = create<ChatState>()(
       model: null,
       owner: null,
       system_prompt: null,
-      messages: [],
       setChat: (payload) =>
         set(
           {
