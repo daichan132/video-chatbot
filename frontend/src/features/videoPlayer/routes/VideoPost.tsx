@@ -1,28 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 // import { useSupabase } from '../supabase-provider';
-import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
+import { fetchFile } from '@ffmpeg/ffmpeg';
 import { Container, FileInput, Text } from '@mantine/core';
+import { ffmpeg } from '@/lib/ffmpeg';
+import { Dropzone } from '@mantine/dropzone';
+import { VideoPlayer } from './VideoPlayer';
 
-const ffmpeg = createFFmpeg({
-  corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js',
-  log: true,
-});
 const MAX_FILE_SIZE = 25000000;
 
-const PostNew = () => {
+export const VideoPost = () => {
   const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    const load = async () => {
-      await ffmpeg.load();
-    };
-    if (!ffmpeg.isLoaded()) {
-      load();
-    }
-  }, []);
 
   const handleChange = async (file: File) => {
     setLoading(true);
-
     try {
       ffmpeg.FS('writeFile', file.name, await fetchFile(file));
       await ffmpeg.run(
@@ -59,20 +49,6 @@ const PostNew = () => {
       const response_data = await response.json();
       const transcript = response_data.transcript.trim();
       console.log(transcript);
-      // postsテーブル追加
-      // const { data: insertData, error: insertError } = await supabase
-      //   .from('posts')
-      //   .insert({
-      //     prompt: transcript,
-      //     content,
-      //   })
-      //   .select();
-
-      // if (insertError) {
-      //   alert(insertError.message);
-      //   setLoading(false);
-      //   return;
-      // }
     } catch (error) {
       console.warn(error);
     }
@@ -81,25 +57,19 @@ const PostNew = () => {
 
   const [file, setValue] = useState<File | null>(null);
   return (
-    <Container w="100%" pt={200}>
-      <FileInput
-        value={file}
-        onChange={(value) => {
-          setValue(value);
-          if (value) {
-            handleChange(value);
+    <Container w="100%">
+      <Dropzone
+        onDrop={(value) => {
+          if (value.length) {
+            setValue(value[0]);
+            handleChange(value[0]);
           }
         }}
-        placeholder="Upload videos"
-      />
-      {file && (
-        <Text size="sm" align="center" mt="sm">
-          Picked file: {file.name}
-        </Text>
-      )}
+      >
+        <Text align="center">Drop video here</Text>
+      </Dropzone>
+      {file && <VideoPlayer src={URL.createObjectURL(file)} />}
       {loading && <div>loading</div>}
     </Container>
   );
 };
-
-export default PostNew;

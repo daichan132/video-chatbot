@@ -8,6 +8,7 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { NextPage } from 'next';
 import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import { ffmpeg } from '@/lib/ffmpeg';
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: React.ReactElement) => React.ReactNode;
@@ -25,6 +26,11 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+async function initializeFFmpeg() {
+  await ffmpeg.load();
+}
+initializeFFmpeg();
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const getLayout = Component.getLayout ?? ((page) => page);

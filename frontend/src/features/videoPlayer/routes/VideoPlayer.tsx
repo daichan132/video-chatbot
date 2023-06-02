@@ -1,8 +1,7 @@
 import 'vidstack/styles/defaults.css';
 
 import { MediaOutlet, MediaPlayer } from '@vidstack/react';
-
-import React from 'react';
+import { Center } from '@mantine/core';
 
 export const VideoPlayer = ({
   src,
@@ -14,9 +13,10 @@ export const VideoPlayer = ({
   poster?: string;
 }) => {
   return (
-    <MediaPlayer title={title} src={src} poster={poster} controls>
-      {/* ^ remove `controls` attribute if you're designing a custom UI */}
-      <MediaOutlet />
-    </MediaPlayer>
+    <Center w="100%" maw={700}>
+      <MediaPlayer title={title} src={src} poster={poster} controls>
+        <MediaOutlet />
+      </MediaPlayer>
+    </Center>
   );
 };

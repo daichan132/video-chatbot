@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction, type FC } from 'react';
 const useStyles = createStyles(() => ({
   chatTextInputWrapper: {
     position: 'absolute',
-    bottom: '50px',
+    bottom: '25px',
     left: '50%',
     botttom: 0,
     transform: 'translateX(-50%)',

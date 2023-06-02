@@ -1,6 +1,6 @@
 import { UnstyledButton, UnstyledButtonProps, Group, Avatar, Text } from '@mantine/core';
 import { forwardRef } from 'react';
-import { AiOutlineRight } from 'react-icons/ai';
+import { BsThreeDotsVertical } from 'react-icons/bs';
 
 interface UserButtonProps extends UnstyledButtonProps {
   image: string;
@@ -37,7 +37,7 @@ export const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(functio
           </Text>
         </div>
 
-        {icon || <AiOutlineRight size="0.9rem" />}
+        {icon || <BsThreeDotsVertical size="0.9rem" />}
       </Group>
     </UnstyledButton>
   );

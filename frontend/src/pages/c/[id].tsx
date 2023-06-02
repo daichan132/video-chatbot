@@ -2,12 +2,17 @@
 import { Chatbot, useQueryChat, useQueryMessages, useQueryPageId } from 'src/features/chatbot';
 import { useRouter } from 'next/router';
 import { createGetLayout } from 'src/components/layout';
+import { Flex, createStyles } from '@mantine/core';
+import { VideoPlayer, VideoPost } from '@/features/videoPlayer';
 import { SimpleGrid, createStyles } from '@mantine/core';
-import { VideoPlayer } from '@/features/videoPlayer';
 import { useUser } from '@supabase/auth-helpers-react';
 
-const useStyles = createStyles(() => ({
-  viewHeight: { height: '100vh', width: '100%', overflow: 'hidden' },
+const useStyles = createStyles((theme) => ({
+  viewHeight: {
+    height: '100vh',
+    width: '100%',
+    backgroundColor: theme.colors.gray[2],
+  },
 }));
 
 const ChatPage = () => {
@@ -59,6 +64,19 @@ const ChatPage = () => {
         <div />
       ) : (
         <div key={currentChat.id}>
+          <Flex
+            className={classes.viewHeight}
+            p="md"
+            gap="md"
+            direction={{ base: 'column', lg: 'row' }}
+            style={{ overflow: 'auto' }}
+            justify="center"
+            align="center"
+          >
+            <VideoPost />
+            {/* <VideoPlayer src="/free-video5-sky-cafinet.mp4" /> */}
+            <Chatbot currentChat={currentChat} initialMessages={messages} />
+          </Flex>
           <div className={classes.viewHeight}>
             <SimpleGrid>
               <VideoPlayer src="/free-video5-sky-cafinet.mp4" />
