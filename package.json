@@ -107,7 +107,7 @@
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix",
     "prepare": "cd .. && husky install frontend/.husky",
-    "start": "next start --keepAliveTimeout 61000",
+    "start": "next start",
     "storybook": "storybook dev -p 6006",
     "typecheck": "tsc --noEmit",
     "gen-type": "supabase gen types typescript --linked > src/types/supabase.ts"
