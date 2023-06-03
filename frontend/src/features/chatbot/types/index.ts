@@ -18,9 +18,8 @@ export interface MessageT
   pair?: string;
 }
 export interface ChatWithMessageCountAndSettings
-  extends Omit<ChatT, 'advanced_settings' | 'model' | 'history_type'>,
+  extends Omit<ChatT, 'nodsPageId: number' | 'model' | 'history_type'>,
     Omit<OpenAISettings, 'system_prompt'> {
   messages: [{ count: number }];
-  advanced_settings: OpenAISettings['advanced_settings'];
   history_type: 'chat' | 'global';
 }

@@ -46,10 +46,13 @@ const ChatPage = () => {
   // };
 
   const videoComponent = (): ReactNode => {
-    if (nods_page?.video_url && user?.id) {
+    if (nods_page?.video_url && user?.id && nods_page?.vtt_url) {
       return (
         <Box w="100%" maw={700}>
-          <VideoPlayer src="https://ohekoozhoqokxzrdjjwt.supabase.co/storage/v1/object/public/videos/4de4af68-c677-4d8c-a71d-4aa3f2baa469/0.6090836913241744.mp4" />
+          <VideoPlayer
+            src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/videos/${user?.id}/${nods_page?.video_url}`}
+            vttfile={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/vttfiles/${user?.id}/${nods_page?.vtt_url}`}
+          />
         </Box>
       );
     }

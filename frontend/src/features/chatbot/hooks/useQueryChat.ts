@@ -13,7 +13,6 @@ export const useQueryChat = (chatId: string) => {
       return {
         id: '',
         title: null,
-        advanced_settings: null,
         created_at: null,
         model: null,
         owner: null,

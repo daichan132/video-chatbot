@@ -11,7 +11,6 @@ export const useMutateChat = () => {
   const queryClient = useQueryClient();
   const model = useChatStore((state) => state.model);
   const system_prompt = useChatStore((state) => state.system_prompt);
-  const advanced_settings = useChatStore((state) => state.advanced_settings);
   const user = useUser();
   const { addNodsPageMutation } = useMutateNodsPage();
 
@@ -23,7 +22,6 @@ export const useMutateChat = () => {
           owner: user?.id,
           model,
           system_prompt,
-          advanced_settings: JSON.stringify(advanced_settings),
           title: 'New Conversation',
         })
         .select(`*`)

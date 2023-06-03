@@ -32,13 +32,4 @@ export interface OpenAISettings {
   model: 'gpt-3.5-turbo' | 'gpt-4';
   history_type: 'chat' | 'global';
   system_prompt: string;
-  advanced_settings: {
-    temperature: number;
-    top_p: number;
-    frequency_penalty: number;
-    presence_penalty: number;
-    max_tokens: number;
-    stream: boolean;
-    n: number;
-  };
 }

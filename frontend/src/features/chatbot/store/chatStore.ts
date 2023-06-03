@@ -12,7 +12,6 @@ const useChatStore = create<ChatState>()(
     (set) => ({
       id: '',
       title: null,
-      advanced_settings: null,
       created_at: null,
       model: null,
       owner: null,

@@ -30,7 +30,6 @@ export interface Database {
     Tables: {
       chats: {
         Row: {
-          advanced_settings: Json | null;
           created_at: string | null;
           id: string;
           model: string | null;
@@ -39,7 +38,6 @@ export interface Database {
           title: string | null;
         };
         Insert: {
-          advanced_settings?: Json | null;
           created_at?: string | null;
           id?: string;
           model?: string | null;
@@ -48,7 +46,6 @@ export interface Database {
           title?: string | null;
         };
         Update: {
-          advanced_settings?: Json | null;
           created_at?: string | null;
           id?: string;
           model?: string | null;
@@ -91,8 +88,6 @@ export interface Database {
           meta: Json | null;
           owner: string | null;
           parent_page_id: number | null;
-          source: string | null;
-          type: string | null;
           video_url: string | null;
           vtt_url: string | null;
         };
@@ -103,8 +98,6 @@ export interface Database {
           meta?: Json | null;
           owner?: string | null;
           parent_page_id?: number | null;
-          source?: string | null;
-          type?: string | null;
           video_url?: string | null;
           vtt_url?: string | null;
         };
@@ -115,8 +108,6 @@ export interface Database {
           meta?: Json | null;
           owner?: string | null;
           parent_page_id?: number | null;
-          source?: string | null;
-          type?: string | null;
           video_url?: string | null;
           vtt_url?: string | null;
         };
@@ -125,34 +116,28 @@ export interface Database {
         Row: {
           content: string | null;
           embedding: string | null;
-          heading: string | null;
           id: number;
           owner: string | null;
           page_id: number;
           segment: Json | null;
-          slug: string | null;
           token_count: number | null;
         };
         Insert: {
           content?: string | null;
           embedding?: string | null;
-          heading?: string | null;
           id?: number;
           owner?: string | null;
           page_id: number;
           segment?: Json | null;
-          slug?: string | null;
           token_count?: number | null;
         };
         Update: {
           content?: string | null;
           embedding?: string | null;
-          heading?: string | null;
           id?: number;
           owner?: string | null;
           page_id?: number;
           segment?: Json | null;
-          slug?: string | null;
           token_count?: number | null;
         };
       };
@@ -191,7 +176,6 @@ export interface Database {
         Returns: {
           id: number;
           parent_page_id: number;
-          path: string;
           meta: Json;
         }[];
       };
@@ -212,9 +196,7 @@ export interface Database {
         Returns: {
           id: number;
           page_id: number;
-          slug: string;
-          heading: string;
-          content: string;
+          segment: Json;
           similarity: number;
         }[];
       };
