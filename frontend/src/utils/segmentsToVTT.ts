@@ -1,10 +1,4 @@
-interface Segment {
-  id: number;
-  start: number;
-  end: number;
-  text: string;
-  // other fields omitted for simplicity
-}
+import { Segment } from '@/types/customSupabase';
 
 function secondsToVTT(seconds: number) {
   const hour = Math.floor(seconds / 3600)

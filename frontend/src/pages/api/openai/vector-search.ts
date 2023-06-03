@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, response: NextApiResp
     const { data: pageSections } = await supabaseServerClient.rpc('match_page_sections', {
       embedding: embedding as unknown as string,
       match_threshold: 0.78,
-      match_count: 2,
+      match_count: 10,
       min_content_length: 5,
       page_id_in: page_id as number,
     });

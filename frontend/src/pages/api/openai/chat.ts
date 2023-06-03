@@ -7,15 +7,15 @@ import { PromptTemplate } from 'langchain';
 import { HumanChatMessage, AIChatMessage } from 'langchain/schema';
 import { OpenAI } from 'langchain/llms/openai';
 
-const CONDENSE_PROMPT = `以下の会話とフォローアップ質問が与えられた場合、それらを単独の質問に変換してください。
-会話: {chat_history}
-フォローアップ質問: {question}
+const CONDENSE_PROMPT = `あなたはAIアシスタントです。以下には私(Human)とあなた(AI)の「会話履歴」と、私からの「質問」が与えられています。
+質問に関する「会話履歴」のみを抽出した新しい会話履歴と、「質問」を与えて下さい。「会話履歴」がない場合は「質問」だけ与えて下さい。「質問」は決して変更しないでください
+「会話履歴」: {chat_history}
+「質問」: {question}
 
-単独の質問:`;
+新しい会話履歴と「質問」:`;
 
-const QA_PROMPT = `あなたは役立つAIアシスタントです。以下の文脈の部分を使用して、最後にある質問に回答してください。
-答えがわからない場合は、ただ「わからない」と言ってください。答えをでっち上げることはしないでください。
-質問が文脈に関連していない場合は、文脈に関連してないと明言しつつ、一般的な正解を回答するようにして下さい。
+const QA_PROMPT = `あなたは役立つAIアシスタントです。以下の「動画の内容」と「私(Human)とあなた(AI)の会話履歴」を利用して、最後にある質問に回答してください。
+見やすさを重視した最低限のMarkdown形式で回答して下さい。
 
 {input}
 
@@ -57,11 +57,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const chain = new LLMChain({ llm, prompt: qa_prompt });
     const result = await chain.call({
       input: `
-    文脈: ${context}
-
-    質問: ${condense_result.text}
+    「動画の内容」: ${context}
+    ${condense_result.text}
     `,
     });
+    console.log(`
+    「動画の内容」: ${context}
+    ${condense_result.text}
+    `);
     res.status(200).json({ res: result.text });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {

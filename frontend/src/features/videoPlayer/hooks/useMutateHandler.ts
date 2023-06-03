@@ -1,8 +1,10 @@
 /* eslint-disable no-alert */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation } from 'react-query';
-import { convertToVTT } from '@/utils/convertToVTT';
+import { convertToVTT } from '@/utils/segmentsToVTT';
 import { videoToAudio } from '@/utils/videoToAudio';
+import { Segment } from '@/types/customSupabase';
+import { compressSegments } from '@/utils/compressSegments';
 import { useUploadVtt } from './useUploadVtt';
 import { useMutateNodsPage } from './useMutateNodsPage';
 
@@ -12,6 +14,10 @@ interface TranscriptType {
 }
 interface SummarizedVttType {
   vttText: string;
+  nodsPageId: number;
+}
+interface compressSegmentsType {
+  segments: Segment[];
   nodsPageId: number;
 }
 
@@ -35,6 +41,27 @@ export const useMutateHandler = () => {
       const blob = new Blob([resp_summerize], { type: 'text/vtt' });
       const file = new File([blob], 'text.vtt', { type: 'text/vtt' });
       useMutateUploadVtt.mutate({ files: [file], nodsPageId });
+    },
+    {
+      onError: (err: any) => {
+        alert(err.message);
+      },
+    }
+  );
+
+  const compressSegmentsMutation = useMutation(
+    async (input: compressSegmentsType) => {
+      const { segments, nodsPageId } = input;
+      await fetch('/api/openai/generate-embeddings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          page_id: nodsPageId,
+          segments: compressSegments(segments),
+        }),
+      });
     },
     {
       onError: (err: any) => {
@@ -70,19 +97,9 @@ export const useMutateHandler = () => {
         },
         nodsPageId,
       });
+      compressSegmentsMutation.mutate({ segments, nodsPageId });
       const vttText = convertToVTT(segments);
       summarisedVttMutation.mutate({ vttText, nodsPageId });
-
-      await fetch('/api/openai/generate-embeddings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          page_id: nodsPageId,
-          segments,
-        }),
-      });
     },
     {
       onError: (err: any) => {
@@ -91,5 +108,5 @@ export const useMutateHandler = () => {
     }
   );
 
-  return { transcriptMutation, summarisedVttMutation };
+  return { transcriptMutation, compressSegmentsMutation };
 };
