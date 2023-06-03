@@ -38,23 +38,8 @@ export default async function handler(req: NextApiRequest, response: NextApiResp
     const res_completion = await req_function();
     const { choices } = res_completion.data;
 
-    // console.log(choices);
     if (choices.length === 0) throw new Error('choices is none.');
-    // const { data } = await res_completion.json();
     const { text: vttTextResult } = choices[0];
-
-    // fs.writeFile(vttfilepath, vttTextResult, (err) => {
-    //   if (err) throw err;
-    // console.log('write vttfile completed.');
-    // const file = fs.readFileSync('public/output.vtt', 'utf-8');
-    // });
-    // const fileExt = file.name.split('.').pop();
-    // const fileName = `${Math.random()}.${fileExt}`;
-    // const filePath = `${fileName}`;
-    // const { error: updateError } = await supabase.storage
-    //   .from('videos')
-    //   .upload(`${user?.id}/${filePath}`, file);
-    // if (updateError) throw new Error(updateError.message);
 
     response.status(200).json(vttTextResult);
   } catch (err) {

@@ -5,6 +5,15 @@
     },
     "pages/api/openai/whisper.ts": {
       "maxDuration": 60
+    },
+    "pages/api/openai/generate-embeddings.ts": {
+      "maxDuration": 60
+    },
+    "pages/api/openai/summarize-to-chapter.ts": {
+      "maxDuration": 60
+    },
+    "pages/api/openai/vector-search.ts": {
+      "maxDuration": 60
     }
   }
 }
