@@ -94,6 +94,7 @@ export interface Database {
           source: string | null;
           type: string | null;
           video_url: string | null;
+          vtt_url: string | null;
         };
         Insert: {
           chat?: string | null;
@@ -105,6 +106,7 @@ export interface Database {
           source?: string | null;
           type?: string | null;
           video_url?: string | null;
+          vtt_url?: string | null;
         };
         Update: {
           chat?: string | null;
@@ -116,6 +118,7 @@ export interface Database {
           source?: string | null;
           type?: string | null;
           video_url?: string | null;
+          vtt_url?: string | null;
         };
       };
       nods_page_section: {

@@ -94,12 +94,17 @@ const ChatPage = () => {
       const { error } = await supabase.storage
         .from('vttfiles')
         .upload(`${user?.id}/${filePath}`, file);
-      console.log('complete upload vtt');
+      // console.log('complete upload vtt');
+      const { data, error: error_update_vtt } = await supabase
+        .from('nods_page')
+        .update({ vtt_url: filePath })
+        .eq('chat', currentChat?.id)
+        .select('*')
+        .single();
+      // console.log('complete update column');
     };
     uploadVttFile();
   };
-
-  // getSummarizedVtt(sampleText);
 
   const videoComponent = (): ReactNode => {
     if (nods_page?.video_url && user?.id) {
