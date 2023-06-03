@@ -50,16 +50,18 @@ export default async function handler(req: NextApiRequest, response: NextApiResp
       throw new Error('pageSections is null');
     }
     for (let i = 0; i < pageSections.length; i += 1) {
-      const { content } = pageSections[i];
-      // const content = pageSection.content;
-      const encoded = tokenizer.encode(content);
-      tokenCount += encoded.text.length;
+      const { segment } = pageSections[i];
+      if (segment) {
+        const { text } = segment;
+        const encoded = tokenizer.encode(content);
+        tokenCount += encoded.text.length;
 
-      if (tokenCount >= 1500) {
-        break;
+        if (tokenCount >= 1500) {
+          break;
+        }
+
+        contextText += `${content.trim()}\n---\n`;
       }
-
-      contextText += `${content.trim()}\n---\n`;
     }
     response.status(200).json(contextText);
   } catch (err) {
