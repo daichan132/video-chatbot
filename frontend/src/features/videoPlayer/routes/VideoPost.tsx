@@ -5,39 +5,25 @@ import { Dropzone } from '@mantine/dropzone';
 import { useUploadVideo } from '../hooks/useUploadVideo';
 import { useMutateNodsPage } from '../hooks/useMutateNodsPage';
 
-export const VideoPost = ({ chatId, refetch }: { chatId: string; refetch: () => void }) => {
+export const VideoPost = ({ nodsPageId, refetch }: { nodsPageId: number; refetch: () => void }) => {
   const { useMutateUploadVideo } = useUploadVideo();
   const { transcriptMutation } = useMutateNodsPage();
   useEffect(() => {
-    if (useMutateUploadVideo.isSuccess) {
+    if (useMutateUploadVideo.isSuccess && transcriptMutation.isSuccess) {
       refetch();
     }
-  }, [refetch, useMutateUploadVideo.isSuccess]);
-
-  // const handleClick = async (page_id: number) => {
-  //   const response = await fetch('/api/openai/generate-embeddings', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       page_id,
-  //     }),
-  //   });
-  //   const data = await response.json();
-  //   console.log(data);
-  // };
+  }, [refetch, useMutateUploadVideo.isSuccess, transcriptMutation.isSuccess]);
 
   return (
     <Container w="100%">
       <Dropzone
         onDrop={(value) => {
           if (value.length) {
-            useMutateUploadVideo.mutate({ files: [value[0]], chatId });
-            transcriptMutation.mutate({ file: value[0], chatId });
+            useMutateUploadVideo.mutate({ files: [value[0]], nodsPageId });
+            transcriptMutation.mutate({ file: value[0], nodsPageId });
           }
         }}
-        loading={useMutateUploadVideo.isLoading}
+        loading={useMutateUploadVideo.isLoading || transcriptMutation.isLoading}
       >
         <Text align="center">Drop video here</Text>
       </Dropzone>

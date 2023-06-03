@@ -8,7 +8,7 @@ import { useMutateNodsPage } from './useMutateNodsPage';
 
 interface UploadVideoInput {
   files: FileWithPath[];
-  chatId: string;
+  nodsPageId: number;
 }
 
 export const useUploadVideo = () => {
@@ -16,7 +16,7 @@ export const useUploadVideo = () => {
   const { updateNodsPageMutation } = useMutateNodsPage();
   const useMutateUploadVideo = useMutation(
     async (input: UploadVideoInput) => {
-      const { files, chatId } = input;
+      const { files, nodsPageId } = input;
       if (!files || files.length === 0) {
         throw new Error('Please select the video file');
       }
@@ -28,7 +28,7 @@ export const useUploadVideo = () => {
         .from('videos')
         .upload(`${user?.id}/${filePath}`, file);
       if (updateError) throw new Error(updateError.message);
-      updateNodsPageMutation.mutate({ nods_page: { video_url: filePath }, chatId });
+      updateNodsPageMutation.mutate({ nods_page: { video_url: filePath }, nodsPageId });
     },
     {
       onError: (err: any) => {

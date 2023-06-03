@@ -3,18 +3,16 @@
 import { useQueryClient, useMutation } from 'react-query';
 import { supabase } from '@/lib/supabase';
 import { Tables } from '@/types/customSupabase';
-import { ffmpeg } from '@/lib/ffmpeg';
-import { fetchFile } from '@ffmpeg/ffmpeg';
-
-const MAX_FILE_SIZE = 25000000;
+import { convertToVTT } from '@/utils/convertToVTT';
+import { videoToAudio } from '@/utils/videoToAudio';
 
 interface UpdateNodsPageType {
   nods_page: Tables['nods_page']['Update'];
-  chatId: string;
+  nodsPageId: number;
 }
 interface TranscriptType {
   file: File;
-  chatId: string;
+  nodsPageId: number;
 }
 
 export const useMutateNodsPage = () => {
@@ -43,11 +41,11 @@ export const useMutateNodsPage = () => {
 
   const updateNodsPageMutation = useMutation(
     async (input: UpdateNodsPageType) => {
-      const { nods_page, chatId } = input;
+      const { nods_page, nodsPageId } = input;
       const { data, error } = await supabase
         .from('nods_page')
         .update(nods_page)
-        .eq('chat', chatId)
+        .eq('id', nodsPageId)
         .select('*')
         .single();
 
@@ -66,54 +64,42 @@ export const useMutateNodsPage = () => {
 
   const transcriptMutation = useMutation(
     async (input: TranscriptType) => {
-      const { file, chatId } = input;
-      ffmpeg.FS('writeFile', file.name, await fetchFile(file));
-      await ffmpeg.run(
-        '-i',
-        file.name,
-        '-vn',
-        '-ar',
-        '16000',
-        '-ac',
-        '1',
-        '-b:a',
-        '96k',
-        '-f',
-        'mp3',
-        'output.mp3'
-      );
-      const readData = ffmpeg.FS('readFile', 'output.mp3');
-      const audioBlob = new Blob([readData.buffer], { type: 'audio/mp3' });
-      if (audioBlob.size > MAX_FILE_SIZE) {
-        throw new Error('too large data');
-      }
-
-      const audio_file = new File([audioBlob], 'audio.mp3', {
-        type: audioBlob.type,
-        lastModified: Date.now(),
-      });
-      const formData = new FormData();
-      formData.append('file', audio_file);
-      const response = await fetch(`/api/openai/whisper`, {
+      const { file, nodsPageId } = input;
+      const formData = await videoToAudio(file);
+      const response_transcript = await fetch(`/api/openai/whisper`, {
         method: 'POST',
         body: formData,
       });
-      const response_data = await response.json();
-      const { data } = response_data;
+      const transcript_data = await response_transcript.json();
+      const { data } = transcript_data;
+
+      const segments = data.segments.map((segment: any) => ({
+        id: segment.id,
+        start: segment.start,
+        end: segment.end,
+        text: segment.text,
+        seek: segment.seek,
+      }));
       updateNodsPageMutation.mutate({
         nods_page: {
           meta: {
             ...data,
-            segments: data.segments.map((segment: any) => ({
-              id: segment.id,
-              start: segment.start,
-              end: segment.end,
-              text: segment.text,
-              seek: segment.seek,
-            })),
+            segments,
           },
         },
-        chatId,
+        nodsPageId,
+      });
+      const vttText = convertToVTT(segments);
+
+      await fetch('/api/openai/generate-embeddings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          page_id: nodsPageId,
+          segments,
+        }),
       });
     },
     {

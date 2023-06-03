@@ -129,6 +129,7 @@ export interface Database {
           id: number;
           owner: string | null;
           page_id: number;
+          segment: Json | null;
           slug: string | null;
           token_count: number | null;
         };
@@ -139,6 +140,7 @@ export interface Database {
           id?: number;
           owner?: string | null;
           page_id: number;
+          segment?: Json | null;
           slug?: string | null;
           token_count?: number | null;
         };
@@ -149,6 +151,7 @@ export interface Database {
           id?: number;
           owner?: string | null;
           page_id?: number;
+          segment?: Json | null;
           slug?: string | null;
           token_count?: number | null;
         };
