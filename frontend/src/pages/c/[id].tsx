@@ -3,9 +3,10 @@
 import { Chatbot, useQueryChat, useQueryMessages } from 'src/features/chatbot';
 import { useRouter } from 'next/router';
 import { createGetLayout } from 'src/components/layout';
-import { createStyles, AspectRatio, Box, Flex, Skeleton } from '@mantine/core';
-import { VideoPlayer, VideoPost, useDownloadVideo, useQueryNodsPage } from '@/features/videoPlayer';
+import { createStyles, Box, Flex } from '@mantine/core';
+import { VideoPlayer, VideoPost, useQueryNodsPage } from '@/features/videoPlayer';
 import { ReactNode } from 'react';
+import { useUser } from '@supabase/auth-helpers-react';
 
 const useStyles = createStyles(() => ({
   viewHeight: {
@@ -18,6 +19,7 @@ const ChatPage = () => {
   const { classes } = useStyles();
 
   const router = useRouter();
+  const user = useUser();
   const { data: currentChat, isLoading: isChatLoading } = useQueryChat(router.query?.id as string);
   const { data: messages, isLoading: isMessagesLoading } = useQueryMessages(
     router.query?.id as string
@@ -27,9 +29,6 @@ const ChatPage = () => {
     isLoading: isNodesPageLoading,
     refetch,
   } = useQueryNodsPage(router.query?.id as string);
-  const { fullUrl: videoUrl, isLoading: isDownloadLoading } = useDownloadVideo(
-    nods_page?.video_url || null
-  );
 
   // const getMatchContext = async (page_id: number, question: string) => {
   //   const response = await fetch('/api/openai/vector-search', {
@@ -61,18 +60,12 @@ const ChatPage = () => {
   // };
 
   const videoComponent = (): ReactNode => {
-    if (nods_page?.video_url) {
-      if (isDownloadLoading) {
-        return (
-          <AspectRatio ratio={16 / 9} w="100%" maw={700}>
-            <Skeleton w="100%" h="100%" visible />
-          </AspectRatio>
-        );
-      }
-      if (videoUrl) {
-        return <VideoPlayer src={videoUrl} />;
-      }
-    } else if (currentChat && !isNodesPageLoading) {
+    if (nods_page?.video_url && user?.id) {
+      return (
+        <VideoPlayer src="https://ohekoozhoqokxzrdjjwt.supabase.co/storage/v1/object/public/videos/4de4af68-c677-4d8c-a71d-4aa3f2baa469/0.6090836913241744.mp4" />
+      );
+    }
+    if (currentChat && !isNodesPageLoading) {
       return <VideoPost chatId={currentChat.id} refetch={() => refetch()} />;
     }
     return <Box w="100%" maw={700} bg="dark" />;

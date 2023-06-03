@@ -11,7 +11,7 @@ import {
 export const VideoPlayer = ({
   src,
   title = 'test',
-  poster = 'https://media-files.vidstack.io/poster.png',
+  poster = '',
   vttfile = '/sample.vtt',
 }: {
   src: string;
@@ -20,7 +20,7 @@ export const VideoPlayer = ({
   vttfile?: string;
 }) => {
   return (
-    <MediaPlayer title={title} src={src} poster={poster}>
+    <MediaPlayer title={title} src={src} poster={poster} crossorigin="anonymous">
       <MediaOutlet>
         <track src={vttfile} srcLang="en-US" kind="chapters" default />
         <MediaPlayButton />
