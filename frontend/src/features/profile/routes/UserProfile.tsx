@@ -5,17 +5,16 @@ import { IoLogOutOutline, IoSettingsOutline } from 'react-icons/io5';
 import { useDisclosure } from '@mantine/hooks';
 import useSupabaseStore from 'src/stores/supabaseStore';
 import { QueryCache } from 'react-query';
-import { useDownloadUrl } from 'src/hooks/useDownloadUrl';
 import router from 'next/router';
 import { useQueryProfile } from '../hooks/useQueryProfile';
 import { UserButton } from '../components/UserButton';
 import { SettingsModal } from '../components/SettingsModal';
+import { useDownloadImage } from '../hooks/useDownloadImage';
 
 export const UserProfile: FC = () => {
   const { data: profile, refetch, isLoading: isLoadingProfile } = useQueryProfile();
-  const { fullUrl: avatarUrl, isLoading: isLoadingDownload } = useDownloadUrl(
-    profile?.avatar_url || null,
-    'avatars'
+  const { fullUrl: avatarUrl, isLoading: isLoadingDownload } = useDownloadImage(
+    profile?.avatar_url || null
   );
 
   const resetProfile = useSupabaseStore((state) => state.resetEditedProfile);

@@ -1,17 +1,16 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react-hooks/rules-of-hooks */
-import { Chatbot, useQueryChat, useQueryMessages, useQueryPageId } from 'src/features/chatbot';
+import { Chatbot, useQueryChat, useQueryMessages } from 'src/features/chatbot';
 import { useRouter } from 'next/router';
 import { createGetLayout } from 'src/components/layout';
-import { Flex, createStyles } from '@mantine/core';
-import { VideoPlayer, VideoPost } from '@/features/videoPlayer';
-import { SimpleGrid, createStyles } from '@mantine/core';
-import { useUser } from '@supabase/auth-helpers-react';
+import { AspectRatio, Box, Flex, Skeleton, createStyles } from '@mantine/core';
+import { VideoPlayer, VideoPost, useDownloadVideo, useQueryNodsPage } from '@/features/videoPlayer';
+import { ReactNode } from 'react';
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles(() => ({
   viewHeight: {
     height: '100vh',
     width: '100%',
-    backgroundColor: theme.colors.gray[2],
   },
 }));
 
@@ -23,25 +22,14 @@ const ChatPage = () => {
   const { data: messages, isLoading: isMessagesLoading } = useQueryMessages(
     router.query?.id as string
   );
-  const { data: nods_page } = useQueryPageId(router.query?.id as string);
-  // if (nods_page !== undefined && nods_page.length > 0) {
-  //   const pageId = nods_page[0].id;
-  //   console.log(pageId);
-  // }
-
-  // const handleClick = async (page_id: number) => {
-  //   const response = await fetch('/api/openai/generate-embeddings', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       page_id,
-  //     }),
-  //   });
-  //   const data = await response.json();
-  //   console.log(data);
-  // };
+  const {
+    data: nods_page,
+    isLoading: isNodesPageLoading,
+    refetch,
+  } = useQueryNodsPage(router.query?.id as string);
+  const { fullUrl: videoUrl, isLoading: isDownloadLoading } = useDownloadVideo(
+    nods_page?.video_url || null
+  );
 
   // const getMatchContext = async (page_id: number, question: string) => {
   //   const response = await fetch('/api/openai/vector-search', {
@@ -57,7 +45,23 @@ const ChatPage = () => {
   //   const data = await response.json();
   //   console.log(data);
   // };
-
+  const videoComponent = (): ReactNode => {
+    if (nods_page?.video_url) {
+      if (isDownloadLoading) {
+        return (
+          <AspectRatio ratio={16 / 9} w="100%" maw={700}>
+            <Skeleton w="100%" h="100%" visible />
+          </AspectRatio>
+        );
+      }
+      if (videoUrl) {
+        return <VideoPlayer src={videoUrl} />;
+      }
+    } else if (currentChat && !isNodesPageLoading) {
+      return <VideoPost chatId={currentChat.id} refetch={() => refetch()} />;
+    }
+    return <Box w="100%" maw={700} bg="dark" />;
+  };
   return (
     <div>
       {isChatLoading || isMessagesLoading || !currentChat || !messages ? (
@@ -73,41 +77,9 @@ const ChatPage = () => {
             justify="center"
             align="center"
           >
-            <VideoPost />
-            {/* <VideoPlayer src="/free-video5-sky-cafinet.mp4" /> */}
+            {videoComponent()}
             <Chatbot currentChat={currentChat} initialMessages={messages} />
           </Flex>
-          <div className={classes.viewHeight}>
-            <SimpleGrid>
-              <VideoPlayer src="/free-video5-sky-cafinet.mp4" />
-              {/* {nods_page?.length ? (
-                <>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      handleClick(nods_page[0].id);
-                    }}
-                  >
-                    generateEmbedding
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      getMatchContext(
-                        nods_page[0].id,
-                        'Japanese Prime Minister Fumio Kishida on May 21 touted the achievements of the Group of Seven summit in Hiroshima, saying the leaders from the advanced economies agreed to work toward a world without nuclear weapons and to stand by Ukraine.'
-                      );
-                    }}
-                  >
-                    get match context
-                  </button>
-                </>
-              ) : (
-                <div />
-              )} */}
-              <Chatbot currentChat={currentChat} initialMessages={messages} />
-            </SimpleGrid>
-          </div>
         </div>
       )}
     </div>

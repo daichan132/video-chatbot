@@ -1,18 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useUser } from '@supabase/auth-helpers-react';
-import { supabase } from '../lib/supabase';
+import { supabase } from '../../../lib/supabase';
 
-export const useDownloadUrl = (filePath: string | null, key: 'avatars' | 'posts') => {
+export const useDownloadVideo = (filePath: string | null) => {
   const user = useUser();
   const [isLoading, setIsLoading] = useState(false);
   const [fullUrl, setFullUrl] = useState('');
-  const bucketName = key === 'avatars' ? 'avatars' : 'posts';
   useEffect(() => {
     if (filePath) {
       const download = async () => {
         setIsLoading(true);
         const { data, error } = await supabase.storage
-          .from(bucketName)
+          .from('videos')
           .download(`${user?.id}/${filePath}`);
         if (error) {
           setIsLoading(false);
@@ -24,7 +23,7 @@ export const useDownloadUrl = (filePath: string | null, key: 'avatars' | 'posts'
       };
       download();
     }
-  }, [filePath, bucketName, user?.id]);
+  }, [filePath, user?.id]);
 
   return { isLoading, fullUrl, setFullUrl };
 };
