@@ -14,21 +14,17 @@
 ### frontend
 frontend で使用しているライブラリは[yarn](https://yarnpkg.com/)を用いて管理しています。`yarn`のセットアップは各自済ませておくようにお願いします。
 
-1. frontend directory に移動する
-   ```
-   cd ./frontend
-   ```
-2. パッケージをインストールする
+1. パッケージをインストールする
    ```zsh
    yarn install
    ```
-3. supabaseの設定を完了する
+2. supabaseの設定を完了する
    
    以下のコマンドを実行し、各環境変数に値を入れる。api keyが必要なときは言ってくれればOK。
    ```zsh
    cp .env.local.template .env.local
    ```
-4. Nextjsで実装したfrontendを立ち上げる
+3. Nextjsで実装したfrontendを立ち上げる
    ```zsh
    yarn dev
    ```
