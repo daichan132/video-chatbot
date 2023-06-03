@@ -21,3 +21,10 @@ export interface Segment {
   text: string;
   // other fields omitted for simplicity
 }
+
+export interface vectorSearchResult {
+  id: number;
+  page_id: number;
+  segment: Segment;
+  similarity: number;
+}

@@ -62,6 +62,7 @@ export interface Database {
           id: string;
           owner: string | null;
           role: string | null;
+          suggestions: Json[] | null;
         };
         Insert: {
           chat?: string | null;
@@ -70,6 +71,7 @@ export interface Database {
           id?: string;
           owner?: string | null;
           role?: string | null;
+          suggestions?: Json[] | null;
         };
         Update: {
           chat?: string | null;
@@ -78,6 +80,7 @@ export interface Database {
           id?: string;
           owner?: string | null;
           role?: string | null;
+          suggestions?: Json[] | null;
         };
       };
       nods_page: {

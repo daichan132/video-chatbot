@@ -17,15 +17,18 @@ const useStyles = createStyles(() => ({
 export const Chatbot = ({
   currentChat,
   initialMessages = [],
+  page_id,
 }: {
   currentChat: Tables['chats']['Row'];
   initialMessages?: Tables['messages']['Row'][];
+  page_id: number | undefined;
 }) => {
   const { classes } = useStyles();
   const loading = false;
   const { inputText, setInputText, messages, addMessageFunc } = useChat(
     currentChat,
-    initialMessages
+    initialMessages,
+    page_id
   );
 
   return (
