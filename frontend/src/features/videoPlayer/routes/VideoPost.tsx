@@ -3,11 +3,11 @@ import { useEffect } from 'react';
 import { Container, Text } from '@mantine/core';
 import { Dropzone } from '@mantine/dropzone';
 import { useUploadVideo } from '../hooks/useUploadVideo';
-import { useMutateNodsPage } from '../hooks/useMutateNodsPage';
+import { useMutateHandler } from '../hooks/useMutateHandler';
 
 export const VideoPost = ({ nodsPageId, refetch }: { nodsPageId: number; refetch: () => void }) => {
   const { useMutateUploadVideo } = useUploadVideo();
-  const { transcriptMutation } = useMutateNodsPage();
+  const { transcriptMutation } = useMutateHandler();
   useEffect(() => {
     if (useMutateUploadVideo.isSuccess && transcriptMutation.isSuccess) {
       refetch();

@@ -1,10 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Configuration, CreateCompletionRequest, OpenAIApi } from 'openai';
+import { Configuration, OpenAIApi } from 'openai';
 import { codeBlock, oneLine } from 'common-tags';
-import fs from 'fs';
 
 export default async function handler(req: NextApiRequest, response: NextApiResponse) {
-  const { vttText, vttfilepath } = req.body;
+  const { vttText } = req.body;
   try {
     const prompt = codeBlock`
     ${oneLine`
@@ -22,7 +21,6 @@ export default async function handler(req: NextApiRequest, response: NextApiResp
     
     Answer as markdown (including related code snippets if available):
     `;
-    console.log(1);
     const configuration = new Configuration({
       apiKey: process.env.OPENAI_API_KEY,
     });
