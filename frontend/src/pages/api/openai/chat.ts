@@ -12,7 +12,7 @@ const QA_PROMPT = `あなたは役に立つAIアシスタントです。以下�
 会話履歴：{chat_history}
 質問：{question}
 
-マークダウン形式での役に立つ回答：`;
+マークダウン形式での回答：`;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { question, history } = req.body;

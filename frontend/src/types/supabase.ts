@@ -90,7 +90,7 @@ export interface Database {
           id: number;
           meta: Json | null;
           owner: string | null;
-          path: string;
+          parent_page_id: number | null;
           source: string | null;
           type: string | null;
           video_url: string | null;
@@ -101,7 +101,7 @@ export interface Database {
           id?: number;
           meta?: Json | null;
           owner?: string | null;
-          path: string;
+          parent_page_id?: number | null;
           source?: string | null;
           type?: string | null;
           video_url?: string | null;
@@ -112,7 +112,7 @@ export interface Database {
           id?: number;
           meta?: Json | null;
           owner?: string | null;
-          path?: string;
+          parent_page_id?: number | null;
           source?: string | null;
           type?: string | null;
           video_url?: string | null;
