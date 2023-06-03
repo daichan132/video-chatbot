@@ -13,11 +13,11 @@ import {
 } from '@mantine/core';
 import { useEffect, type FC } from 'react';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
-import { useDownloadUrl } from 'src/hooks/useDownloadUrl';
 import { TbMoonStars, TbSunLow } from 'react-icons/tb';
 import { useUser } from '@supabase/auth-helpers-react';
 import { useUploadAvatarImg } from '../../hooks/useUploadAvatarImg';
 import { useMutateProfile } from '../../hooks/useMutateProfile';
+import { useDownloadImage } from '../../hooks/useDownloadImage';
 
 type SettingsModalType = {
   opened: boolean;
@@ -26,7 +26,7 @@ type SettingsModalType = {
 };
 export const SettingsModal: FC<SettingsModalType> = ({ opened, close, refetch }) => {
   const editedProfile = useSupabaseStore((state) => state.editedProfile);
-  const { fullUrl: avatarUrl, isLoading } = useDownloadUrl(editedProfile.avatar_url, 'avatars');
+  const { fullUrl: avatarUrl, isLoading } = useDownloadImage(editedProfile.avatar_url);
   const user = useUser();
 
   const { useMutateUploadAvatarImg } = useUploadAvatarImg();

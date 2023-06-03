@@ -25,11 +25,12 @@ export const ChatDialog: FC<ChatDialogProps> = ({ messages }) => {
     <ScrollArea
       viewportRef={viewport}
       h="100%"
+      w="100%"
       type="scroll"
       styles={(theme) => ({
         scrollbar: {
           '&[data-orientation="vertical"]': {
-            width: 8,
+            width: 12,
           },
           '&[data-orientation="vertical"] .mantine-ScrollArea-thumb': {
             backgroundColor: theme.colors.dark[0],
@@ -37,14 +38,14 @@ export const ChatDialog: FC<ChatDialogProps> = ({ messages }) => {
         },
       })}
     >
-      <Stack spacing={0}>
+      <Stack spacing={0} w="100%">
         {messages.map((message) => (
           <React.Fragment key={`${message.id}-${message.created_at}`}>
             <ChatMessage message={message} />
           </React.Fragment>
         ))}
-        <Box h={160} />
       </Stack>
+      <Box h={90} />
     </ScrollArea>
   );
 };

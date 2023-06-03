@@ -4,6 +4,7 @@ import { useQueryClient, useMutation } from 'react-query';
 import { supabase } from '@/lib/supabase';
 import router from 'next/router';
 import { useUser } from '@supabase/auth-helpers-react';
+import { useMutateNodsPage } from '@/features/videoPlayer';
 import useChatStore from '../store/chatStore';
 
 export const useMutateChat = () => {
@@ -12,6 +13,7 @@ export const useMutateChat = () => {
   const system_prompt = useChatStore((state) => state.system_prompt);
   const advanced_settings = useChatStore((state) => state.advanced_settings);
   const user = useUser();
+  const { addNodsPageMutation } = useMutateNodsPage();
 
   const addChatMutation = useMutation(
     async () => {
@@ -27,6 +29,7 @@ export const useMutateChat = () => {
         .select(`*`)
         .single();
       if (error) throw new Error(error.message);
+      addNodsPageMutation.mutate({ chat: data.id, owner: user?.id });
       router.push(`/c/${data.id}`);
       return data;
     },

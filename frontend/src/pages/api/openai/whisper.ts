@@ -36,11 +36,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileContent as any,
       'whisper-1',
-      'prompt',
-      'srt'
+      undefined,
+      'verbose_json'
     );
-    const transcript = response.data;
-    res.status(200).json({ transcript });
+    const { data } = response;
+    res.status(200).json({ data });
   } catch (error) {
     // console.error(error);
     res.status(500).send('Something went wrong');

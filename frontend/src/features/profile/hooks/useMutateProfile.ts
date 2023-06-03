@@ -6,7 +6,6 @@ import { supabase } from '@/lib/supabase';
 
 export const useMutateProfile = () => {
   const queryClient = useQueryClient();
-
   const createProfileMutation = useMutation(
     async (profile: Tables['profiles']['Insert']) => {
       const { data, error } = await supabase.from('profiles').insert(profile);
@@ -15,7 +14,7 @@ export const useMutateProfile = () => {
     },
     {
       onSuccess: (res) => {
-        if (res) queryClient.setQueryData(['profile'], res[0]);
+        if (res) queryClient.setQueryData([`profile`], res[0]);
       },
       onError: (err: any) => {
         alert(err.message);
@@ -30,7 +29,7 @@ export const useMutateProfile = () => {
     },
     {
       onSuccess: (res) => {
-        if (res) queryClient.setQueryData(['profile'], res[0]);
+        if (res) queryClient.setQueryData([`profile`], res[0]);
       },
       onError: (err: any) => {
         alert(err.message);

@@ -1,11 +1,17 @@
-import { createStyles } from '@mantine/core';
+import { Paper, createStyles } from '@mantine/core';
 import { Tables } from '@/types/customSupabase';
 import { ChatDialog } from '../components/ChatDialog';
 import { ChatTextInput } from '../components/ChatTextInput';
 import { useChat } from '../hooks/useChat';
 
 const useStyles = createStyles(() => ({
-  container: { position: 'relative', height: '100%', width: '100%' },
+  container: {
+    position: 'relative',
+    height: '100%',
+    width: '100%',
+    maxWidth: '800px',
+    overflow: 'hidden',
+  },
 }));
 
 export const Chatbot = ({
@@ -23,7 +29,7 @@ export const Chatbot = ({
   );
 
   return (
-    <div className={classes.container}>
+    <Paper className={classes.container} shadow="xl" p={0} radius="md">
       <ChatDialog messages={messages} />
       <ChatTextInput
         inputText={inputText}
@@ -34,6 +40,6 @@ export const Chatbot = ({
         }}
         loading={loading}
       />
-    </div>
+    </Paper>
   );
 };

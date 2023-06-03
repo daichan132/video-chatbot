@@ -1,5 +1,6 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react-hooks/rules-of-hooks */
-import { Chatbot, useQueryChat, useQueryMessages, useQueryPageId } from 'src/features/chatbot';
+import { Chatbot, useQueryChat, useQueryMessages } from 'src/features/chatbot';
 import { useRouter } from 'next/router';
 import { createGetLayout } from 'src/components/layout';
 import { SimpleGrid, createStyles } from '@mantine/core';
@@ -169,9 +170,15 @@ TUV問題っていうのは先生がビデオしかアップロードしない�
 8
 00:00:57,000 --> 00:01:03,000
 試験前に見返せないし、今時iPadで書き込みたい人も多いはずです`;
+import { AspectRatio, Box, Flex, Skeleton, createStyles } from '@mantine/core';
+import { VideoPlayer, VideoPost, useDownloadVideo, useQueryNodsPage } from '@/features/videoPlayer';
+import { ReactNode } from 'react';
 
 const useStyles = createStyles(() => ({
-  viewHeight: { height: '100vh', width: '100%', overflow: 'hidden' },
+  viewHeight: {
+    height: '100vh',
+    width: '100%',
+  },
 }));
 
 const ChatPage = () => {
@@ -182,25 +189,14 @@ const ChatPage = () => {
   const { data: messages, isLoading: isMessagesLoading } = useQueryMessages(
     router.query?.id as string
   );
-  const { data: nods_page } = useQueryPageId(router.query?.id as string);
-  // if (nods_page !== undefined && nods_page.length > 0) {
-  //   const pageId = nods_page[0].id;
-  //   console.log(pageId);
-  // }
-
-  // const handleClick = async (page_id: number) => {
-  //   const response = await fetch('/api/openai/generate-embeddings', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       page_id,
-  //     }),
-  //   });
-  //   const data = await response.json();
-  //   console.log(data);
-  // };
+  const {
+    data: nods_page,
+    isLoading: isNodesPageLoading,
+    refetch,
+  } = useQueryNodsPage(router.query?.id as string);
+  const { fullUrl: videoUrl, isLoading: isDownloadLoading } = useDownloadVideo(
+    nods_page?.video_url || null
+  );
 
   // const getMatchContext = async (page_id: number, question: string) => {
   //   const response = await fetch('/api/openai/vector-search', {
@@ -231,6 +227,23 @@ const ChatPage = () => {
     console.log(resp_summerize);
   };
 
+  const videoComponent = (): ReactNode => {
+    if (nods_page?.video_url) {
+      if (isDownloadLoading) {
+        return (
+          <AspectRatio ratio={16 / 9} w="100%" maw={700}>
+            <Skeleton w="100%" h="100%" visible />
+          </AspectRatio>
+        );
+      }
+      if (videoUrl) {
+        return <VideoPlayer src={videoUrl} />;
+      }
+    } else if (currentChat && !isNodesPageLoading) {
+      return <VideoPost chatId={currentChat.id} refetch={() => refetch()} />;
+    }
+    return <Box w="100%" maw={700} bg="dark" />;
+  };
   return (
     <div>
       {isChatLoading || isMessagesLoading || !currentChat || !messages ? (
@@ -271,6 +284,18 @@ const ChatPage = () => {
               <Chatbot currentChat={currentChat} initialMessages={messages} />
             </SimpleGrid>
           </div>
+          <Flex
+            className={classes.viewHeight}
+            p="md"
+            gap="md"
+            direction={{ base: 'column', lg: 'row' }}
+            style={{ overflow: 'auto' }}
+            justify="center"
+            align="center"
+          >
+            {videoComponent()}
+            <Chatbot currentChat={currentChat} initialMessages={messages} />
+          </Flex>
         </div>
       )}
     </div>
