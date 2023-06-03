@@ -94,6 +94,7 @@ export interface Database {
           source: string | null;
           type: string | null;
           video_url: string | null;
+          vtt_url: string | null;
         };
         Insert: {
           chat?: string | null;
@@ -105,6 +106,7 @@ export interface Database {
           source?: string | null;
           type?: string | null;
           video_url?: string | null;
+          vtt_url?: string | null;
         };
         Update: {
           chat?: string | null;
@@ -116,6 +118,7 @@ export interface Database {
           source?: string | null;
           type?: string | null;
           video_url?: string | null;
+          vtt_url?: string | null;
         };
       };
       nods_page_section: {
@@ -126,6 +129,7 @@ export interface Database {
           id: number;
           owner: string | null;
           page_id: number;
+          segment: Json | null;
           slug: string | null;
           token_count: number | null;
         };
@@ -136,6 +140,7 @@ export interface Database {
           id?: number;
           owner?: string | null;
           page_id: number;
+          segment?: Json | null;
           slug?: string | null;
           token_count?: number | null;
         };
@@ -146,6 +151,7 @@ export interface Database {
           id?: number;
           owner?: string | null;
           page_id?: number;
+          segment?: Json | null;
           slug?: string | null;
           token_count?: number | null;
         };

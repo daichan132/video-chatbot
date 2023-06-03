@@ -62,13 +62,15 @@ const ChatPage = () => {
   const videoComponent = (): ReactNode => {
     if (nods_page?.video_url && user?.id) {
       return (
-        <VideoPlayer src="https://ohekoozhoqokxzrdjjwt.supabase.co/storage/v1/object/public/videos/4de4af68-c677-4d8c-a71d-4aa3f2baa469/0.6090836913241744.mp4" />
+        <Box w="100%" maw={700}>
+          <VideoPlayer src="https://ohekoozhoqokxzrdjjwt.supabase.co/storage/v1/object/public/videos/4de4af68-c677-4d8c-a71d-4aa3f2baa469/0.6090836913241744.mp4" />
+        </Box>
       );
     }
-    if (currentChat && !isNodesPageLoading) {
-      return <VideoPost chatId={currentChat.id} refetch={() => refetch()} />;
+    if (nods_page?.id && !isNodesPageLoading) {
+      return <VideoPost nodsPageId={nods_page?.id} refetch={() => refetch()} />;
     }
-    return <Box w="100%" maw={700} bg="dark" />;
+    return <Box w="100%" maw={700} />;
   };
   return (
     <div>
