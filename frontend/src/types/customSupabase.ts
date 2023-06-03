@@ -13,3 +13,18 @@ export type EditedProfile = {
 };
 
 export type Tables = Database['public']['Tables'];
+
+export interface Segment {
+  id: number;
+  start: number;
+  end: number;
+  text: string;
+  // other fields omitted for simplicity
+}
+
+export interface vectorSearchResult {
+  id: number;
+  page_id: number;
+  segment: Segment;
+  similarity: number;
+}

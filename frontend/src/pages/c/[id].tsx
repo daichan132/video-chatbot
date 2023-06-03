@@ -77,7 +77,7 @@ const ChatPage = () => {
             align="center"
           >
             {videoComponent()}
-            <Chatbot currentChat={currentChat} initialMessages={messages} />
+            <Chatbot currentChat={currentChat} initialMessages={messages} page_id={nods_page?.id} />
           </Flex>
         </div>
       )}

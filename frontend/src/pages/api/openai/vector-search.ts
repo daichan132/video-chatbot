@@ -1,8 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import GPT3Tokenizer from 'gpt3-tokenizer';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
-import { Database } from '@/types/supabase';
+import { Database, Json } from '@/types/supabase';
 import { Configuration, OpenAIApi } from 'openai';
+import { Segment } from '@/types/customSupabase';
 
 export default async function handler(req: NextApiRequest, response: NextApiResponse) {
   const supabaseServerClient = createPagesServerClient<Database>({
@@ -26,21 +27,16 @@ export default async function handler(req: NextApiRequest, response: NextApiResp
       return embeddingResponse.data;
     };
 
-    const { data: emb_res_data } = await getEmbedding(question);
+    const { data: emb_res_data } = await getEmbedding(sanitizedQuery);
     const { embedding } = emb_res_data[0];
-    console.log(embedding);
 
-    const { error: matchError, data: pageSections } = await supabaseServerClient.rpc(
-      'match_page_sections',
-      {
-        embedding: embedding as unknown as string,
-        match_threshold: 0.78,
-        match_count: 2,
-        min_content_length: 5,
-        page_id_in: page_id as number,
-      }
-    );
-    console.log(pageSections);
+    const { data: pageSections } = await supabaseServerClient.rpc('match_page_sections', {
+      embedding: embedding as unknown as string,
+      match_threshold: 0.78,
+      match_count: 2,
+      min_content_length: 5,
+      page_id_in: page_id as number,
+    });
 
     const tokenizer = new GPT3Tokenizer({ type: 'gpt3' });
     let tokenCount = 0;
@@ -49,19 +45,29 @@ export default async function handler(req: NextApiRequest, response: NextApiResp
     if (pageSections == null) {
       throw new Error('pageSections is null');
     }
+
+    const resultList: {
+      id: number;
+      page_id: number;
+      segment: Json;
+      similarity: number;
+    }[] = [];
+
     for (let i = 0; i < pageSections.length; i += 1) {
-      const { content } = pageSections[i];
-      // const content = pageSection.content;
-      const encoded = tokenizer.encode(content);
-      tokenCount += encoded.text.length;
+      const { segment } = pageSections[i];
+      resultList.push(pageSections[i]);
+      if (segment) {
+        const { text } = segment as unknown as Segment; // TODO:fix type
+        const encoded = tokenizer.encode(text);
+        tokenCount += encoded.text.length;
+        if (tokenCount >= 1500) {
+          break;
+        }
 
-      if (tokenCount >= 1500) {
-        break;
+        contextText += `${text.trim()}\n---\n`;
       }
-
-      contextText += `${content.trim()}\n---\n`;
     }
-    response.status(200).json(contextText);
+    response.status(200).json({ contextText, resultList });
   } catch (err) {
     response.status(500).json(err);
   }
