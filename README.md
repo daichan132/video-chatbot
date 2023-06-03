@@ -4,7 +4,6 @@
 
 プロジェクトを使用するために必要な環境
 
-- Python 3.10.x
 - Node.js 18.4.0
 - OPENAI_API_KEY の環境変数に OpenAI API key を設定しておく([設定方法](https://ovaldesign.jp/2023/04/05/openai/))
 
@@ -34,20 +33,4 @@ frontend で使用しているライブラリは[yarn](https://yarnpkg.com/)を�
    yarn dev
    ```
    その後http://localhost:3000/ にアクセスする。
-
-### backend
-backend の python のパッケージは[poetry](https://github.com/python-poetry/poetry)を用いて管理しています。`poetry`のセットアップは各自済ませておくようにお願いします。
-
-1. backend directory に移動する
-   ```
-   cd ./backend
-   ```
-2. パッケージをインストールする
-   ```zsh
-   poetry install
-   ```
-3. fastapiで実装したapiを起動する
-   ```zsh
-   uvicorn src.main:app --reload
-   ```
 
