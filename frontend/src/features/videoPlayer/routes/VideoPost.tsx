@@ -7,12 +7,21 @@ import { useMutateHandler } from '../hooks/useMutateHandler';
 
 export const VideoPost = ({ nodsPageId, refetch }: { nodsPageId: number; refetch: () => void }) => {
   const { useMutateUploadVideo } = useUploadVideo();
-  const { transcriptMutation } = useMutateHandler();
+  const { transcriptMutation, summarisedVttMutation } = useMutateHandler();
   useEffect(() => {
-    if (useMutateUploadVideo.isSuccess && transcriptMutation.isSuccess) {
+    if (
+      useMutateUploadVideo.isSuccess &&
+      transcriptMutation.isSuccess &&
+      summarisedVttMutation.isSuccess
+    ) {
       refetch();
     }
-  }, [refetch, useMutateUploadVideo.isSuccess, transcriptMutation.isSuccess]);
+  }, [
+    refetch,
+    useMutateUploadVideo.isSuccess,
+    transcriptMutation.isSuccess,
+    summarisedVttMutation.isSuccess,
+  ]);
 
   return (
     <Container w="100%">
@@ -23,7 +32,11 @@ export const VideoPost = ({ nodsPageId, refetch }: { nodsPageId: number; refetch
             transcriptMutation.mutate({ file: value[0], nodsPageId });
           }
         }}
-        loading={useMutateUploadVideo.isLoading || transcriptMutation.isLoading}
+        loading={
+          useMutateUploadVideo.isLoading ||
+          transcriptMutation.isLoading ||
+          summarisedVttMutation.isLoading
+        }
       >
         <Text align="center">Drop video here</Text>
       </Dropzone>

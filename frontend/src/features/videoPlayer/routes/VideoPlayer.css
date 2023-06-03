@@ -21,3 +21,17 @@ media-gesture[action='seek:10'] {
   height: 100%;
   z-index: 1;
 }
+
+.media-player:not([data-fullscreen]) {
+  max-width: 680px;
+  aspect-ratio: 16/9;
+  border-radius: 2px;
+}
+
+:global(.hero-video media-captions [part='cue']) {
+  letter-spacing: 0.025em;
+}
+
+div[part='chapter-title'] {
+  text-shadow: -1px -1px 0 #212121, 1px -1px 0 #212121, -1px 1px 0 #212121, 1px 1px 0 #212121;
+}
