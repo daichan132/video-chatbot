@@ -13,3 +13,11 @@ export type EditedProfile = {
 };
 
 export type Tables = Database['public']['Tables'];
+
+export interface Segment {
+  id: number;
+  start: number;
+  end: number;
+  text: string;
+  // other fields omitted for simplicity
+}
