@@ -91,5 +91,5 @@ export const useMutateHandler = () => {
     }
   );
 
-  return { transcriptMutation };
+  return { transcriptMutation, summarisedVttMutation };
 };

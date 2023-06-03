@@ -20,13 +20,19 @@ export const VideoPlayer = ({
   vttfile?: string;
 }) => {
   return (
-    <MediaPlayer title={title} src={src} poster={poster} crossorigin="anonymous">
+    <MediaPlayer
+      className="hero-video"
+      title={title}
+      src={src}
+      poster={poster}
+      crossorigin="anonymous"
+    >
       <MediaOutlet>
         <track src={vttfile} srcLang="en-US" kind="chapters" default />
         <MediaPlayButton />
         <MediaTimeSlider>
           <div slot="preview">
-            <span part="chapter-title">Capter Title</span>
+            <span part="chapter-title" />
             <MediaSliderValue type="pointer" format="time" />
           </div>
         </MediaTimeSlider>
