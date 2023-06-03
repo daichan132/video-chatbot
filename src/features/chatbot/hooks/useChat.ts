@@ -62,7 +62,6 @@ export const useChat = (
       setMessages((prev) => [...prev, resMessage]);
       addMessageMutation.mutate([resMessage]);
     } catch (e: any) {
-      console.log(e);
       console.warn(e.message);
     }
   };

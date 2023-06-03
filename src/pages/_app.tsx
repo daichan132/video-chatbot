@@ -2,7 +2,7 @@
 import { AppProps } from 'next/app';
 import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core';
 import Head from 'next/head';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { NextPage } from 'next';
@@ -30,7 +30,6 @@ const queryClient = new QueryClient({
 async function initializeFFmpeg() {
   await ffmpeg.load();
 }
-initializeFFmpeg();
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const getLayout = Component.getLayout ?? ((page) => page);
@@ -40,6 +39,9 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
 
   const [supabaseClient] = useState(() => createPagesBrowserClient());
 
+  useEffect(() => {
+    initializeFFmpeg();
+  }, []);
   return (
     <>
       <Head>
