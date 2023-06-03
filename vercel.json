@@ -1,9 +1,9 @@
 {
   "functions": {
-    "api/openai/chat.ts": {
+    "pages/api/openai/chat.ts": {
       "maxDuration": 60
     },
-    "api/openai/whisper.ts": {
+    "pages/api/openai/whisper.ts": {
       "maxDuration": 60
     }
   }
