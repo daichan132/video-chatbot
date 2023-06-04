@@ -5,7 +5,9 @@ import { supabase } from '@/lib/supabase';
 import router from 'next/router';
 import { useUser } from '@supabase/auth-helpers-react';
 import { useMutateNodsPage } from '@/features/videoPlayer';
-import useChatStore from '../store/chatStore';
+import { Tables } from '@/types/customSupabase';
+import { shallow } from 'zustand/shallow';
+import useChatStore from '../../../stores/chatStore';
 
 export const useMutateChat = () => {
   const queryClient = useQueryClient();
@@ -13,6 +15,7 @@ export const useMutateChat = () => {
   const system_prompt = useChatStore((state) => state.system_prompt);
   const user = useUser();
   const { addNodsPageMutation } = useMutateNodsPage();
+  const id = useChatStore((state) => state.id, shallow);
 
   const addChatMutation = useMutation(
     async () => {
@@ -56,5 +59,17 @@ export const useMutateChat = () => {
       },
     }
   );
-  return { addChatMutation, deleteChatMutation };
+  const updateChatMutation = useMutation(
+    async (chat: Tables['chats']['Update']) => {
+      const { error } = await supabase.from('chat').update(chat).eq('id', id);
+
+      if (error) throw new Error(error.message);
+    },
+    {
+      onError: (err: any) => {
+        alert(err.message);
+      },
+    }
+  );
+  return { addChatMutation, deleteChatMutation, updateChatMutation };
 };

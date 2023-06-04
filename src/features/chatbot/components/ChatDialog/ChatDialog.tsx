@@ -3,10 +3,11 @@ import { type FC, useRef, useEffect } from 'react';
 import React from 'react';
 import { Tables } from '@/types/customSupabase';
 import { ChatMessage } from './ChatMessage';
+import { SuggestionType } from '../../hooks/useChat';
 
 export type ChatDialogProps = {
   messages: Tables['messages']['Row'][];
-  suggestions: string[];
+  suggestions: SuggestionType[];
 };
 
 export const ChatDialog: FC<ChatDialogProps> = ({ messages, suggestions }) => {
@@ -40,11 +41,11 @@ export const ChatDialog: FC<ChatDialogProps> = ({ messages, suggestions }) => {
       })}
     >
       <Stack spacing={0} w="100%">
-        {messages.map((message) => (
+        {messages.map((message, i) => (
           <React.Fragment key={`${message.id}-${message.created_at}`}>
             <ChatMessage
               message={message}
-              suggestions={(messages[messages.length - 1] === message && suggestions) || []}
+              suggestions={(messages.length - 1 === i && suggestions) || []}
             />
           </React.Fragment>
         ))}

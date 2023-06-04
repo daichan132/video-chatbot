@@ -75,7 +75,6 @@ const ChatPage = () => {
             style={{ overflow: 'auto' }}
             justify="center"
             align="center"
-            bg="#eeeeee"
           >
             {videoComponent()}
             <Chatbot currentChat={currentChat} initialMessages={messages} page_id={nods_page?.id} />
