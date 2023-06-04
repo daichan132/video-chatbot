@@ -62,7 +62,7 @@ export const useChat = (
         }),
       });
       const data = await response.json();
-      const suggestionList = [];
+      const suggestionList = ['\n以下に質問に関連のある箇所を表示します。\n'];
       for (let i = 0; i < resultList.length; i += 1) {
         if (resultList[i].similarity > 0.8)
           suggestionList.push(
@@ -79,7 +79,7 @@ export const useChat = (
       }
       setSuggestions(suggestionList);
       const resMessage: Tables['messages']['Row'] = {
-        content: [data.res, '\n以下に質問に関連のある箇所を表示します。\n'].join('\n'),
+        content: [data.res].join('\n'),
         role: 'system',
         chat: currentChat.id,
         id: uuidv4(),

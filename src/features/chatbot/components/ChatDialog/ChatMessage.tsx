@@ -60,7 +60,7 @@ export const ChatMessage = ({
         )}
         <div className={classes.text}>
           <ReactMarkdown>{message.content || ''}</ReactMarkdown>
-          {message.role === 'system' && (
+          {message.role === 'system' && suggestions && (
             <Spoiler maxHeight={0} showLabel="Show more" hideLabel="Hide" transitionDuration={500}>
               <Stack>
                 {suggestions &&

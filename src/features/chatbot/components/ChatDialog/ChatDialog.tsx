@@ -42,7 +42,10 @@ export const ChatDialog: FC<ChatDialogProps> = ({ messages, suggestions }) => {
       <Stack spacing={0} w="100%">
         {messages.map((message) => (
           <React.Fragment key={`${message.id}-${message.created_at}`}>
-            <ChatMessage message={message} suggestions={suggestions} />
+            <ChatMessage
+              message={message}
+              suggestions={(messages[messages.length - 1] === message && suggestions) || []}
+            />
           </React.Fragment>
         ))}
       </Stack>
