@@ -31,7 +31,7 @@ export const UserProfile: FC = () => {
     <>
       <Menu shadow="md" width={200}>
         <Menu.Target>
-          <Box h={50}>
+          <Box h={80}>
             {isLoadingDownload || isLoadingProfile ? (
               <Center h="100%">
                 <Loader color="gray" size="sm" />
