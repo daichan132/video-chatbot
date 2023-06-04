@@ -34,7 +34,7 @@ export const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(functio
           <Text
             size="sm"
             weight={500}
-            sx={{ textOverflow: 'ellipsis', overflow: 'hidden', width: '60%' }}
+            sx={{ textOverflow: 'ellipsis', overflow: 'hidden', width: 150 }}
           >
             {name}
           </Text>

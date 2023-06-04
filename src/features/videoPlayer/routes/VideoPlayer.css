@@ -35,3 +35,25 @@ media-gesture[action='seek:10'] {
 div[part='chapter-title'] {
   text-shadow: -1px -1px 0 #212121, 1px -1px 0 #212121, -1px 1px 0 #212121, 1px 1px 0 #212121;
 }
+
+media-chapters-menu-items {
+}
+
+/* Apply styles when there are thumbnails. */
+media-chapters-menu-items[data-thumbnails] {
+  left: 0px;
+  right: auto;
+}
+
+media-chapters-menu-items [part='chapter'] {
+  background-color: white;
+}
+
+media-chapters-menu-items [part='chapter'][data-focus] {
+}
+
+media-chapters-menu-items [part='chapter'][aria-checked='true'] {
+}
+
+media-chapters-menu-items [part='thumbnail'] {
+}

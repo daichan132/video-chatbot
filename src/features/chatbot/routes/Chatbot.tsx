@@ -32,7 +32,7 @@ export const Chatbot = ({
   );
 
   return (
-    <Paper className={classes.container} shadow="xl" p={0} radius="md">
+    <Paper className={classes.container} shadow="xl" p={0} radius="lg" withBorder>
       <ChatDialog messages={messages} />
       <ChatTextInput
         inputText={inputText}

@@ -14,7 +14,7 @@ const useStyles = createStyles((theme, role: string) => ({
           ? theme.colors.gray[8]
           : theme.colors.gray[9]
         : role === 'system'
-        ? theme.colors.gray[1]
+        ? theme.colors.gray[0]
         : theme.colors.white,
     padding: '12px 16px',
     borderBottom:
