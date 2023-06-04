@@ -6,9 +6,10 @@ import { ChatMessage } from './ChatMessage';
 
 export type ChatDialogProps = {
   messages: Tables['messages']['Row'][];
+  suggestions: string[];
 };
 
-export const ChatDialog: FC<ChatDialogProps> = ({ messages }) => {
+export const ChatDialog: FC<ChatDialogProps> = ({ messages, suggestions }) => {
   const viewport = useRef<HTMLDivElement>(null);
   const scrollToBottomSmooth = () =>
     viewport.current?.scrollTo({ top: viewport.current.scrollHeight, behavior: 'smooth' });
@@ -41,7 +42,10 @@ export const ChatDialog: FC<ChatDialogProps> = ({ messages }) => {
       <Stack spacing={0} w="100%">
         {messages.map((message) => (
           <React.Fragment key={`${message.id}-${message.created_at}`}>
-            <ChatMessage message={message} />
+            <ChatMessage
+              message={message}
+              suggestions={(messages[messages.length - 1] === message && suggestions) || []}
+            />
           </React.Fragment>
         ))}
       </Stack>

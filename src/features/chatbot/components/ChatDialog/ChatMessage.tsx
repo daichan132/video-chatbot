@@ -1,8 +1,20 @@
 /* eslint-disable react/no-children-prop */
-import { Flex, ThemeIcon, createStyles } from '@mantine/core';
+import {
+  Box,
+  Button,
+  Collapse,
+  Flex,
+  Group,
+  Spoiler,
+  ThemeIcon,
+  createStyles,
+  Text,
+  Stack,
+} from '@mantine/core';
 import { AiOutlineUser } from 'react-icons/ai';
 import ReactMarkdown from 'react-markdown';
 import { Tables } from '@/types/customSupabase';
+import { useDisclosure } from '@mantine/hooks';
 
 const useStyles = createStyles((theme, role: string) => ({
   container: {
@@ -27,8 +39,15 @@ const useStyles = createStyles((theme, role: string) => ({
   text: {},
 }));
 
-export const ChatMessage = ({ message }: { message: Tables['messages']['Row'] }) => {
+export const ChatMessage = ({
+  message,
+  suggestions,
+}: {
+  message: Tables['messages']['Row'];
+  suggestions: string[];
+}) => {
   const { classes } = useStyles(message.role || '');
+
   return (
     <div className={classes.container}>
       <Flex gap="sm" wrap="nowrap" p="md" className={classes.flexWrapper}>
@@ -41,6 +60,16 @@ export const ChatMessage = ({ message }: { message: Tables['messages']['Row'] })
         )}
         <div className={classes.text}>
           <ReactMarkdown>{message.content || ''}</ReactMarkdown>
+          {message.role === 'system' && suggestions && (
+            <Spoiler maxHeight={0} showLabel="Show more" hideLabel="Hide" transitionDuration={500}>
+              <Stack>
+                {suggestions &&
+                  suggestions.map((item) => {
+                    return <p key={item}>{item}</p>;
+                  })}
+              </Stack>
+            </Spoiler>
+          )}
         </div>
       </Flex>
     </div>
