@@ -51,7 +51,6 @@ export const ChatMessage = ({
           <ReactMarkdown>{message.content || ''}</ReactMarkdown>
           {message.role === 'system' && suggestions.length > 0 && (
             <Accordion
-              defaultValue="customization"
               styles={{
                 item: {
                   backgroundColor: 'white',
