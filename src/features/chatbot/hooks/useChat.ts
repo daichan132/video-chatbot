@@ -3,6 +3,11 @@ import { Tables } from '@/types/customSupabase';
 import { useState } from 'react';
 import { useMutateMessage } from './useMutateMessage';
 
+export type SuggestionType = {
+  start: string;
+  end: string;
+  text: string;
+};
 function formatSecondsToHMS(seconds: number): string {
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
@@ -12,6 +17,9 @@ function formatSecondsToHMS(seconds: number): string {
   const minutesStr = minutes.toString().padStart(2, '0');
   const secondsStr = remainingSeconds.toString().padStart(2, '0');
 
+  if (hoursStr === '00') {
+    return `${minutesStr}:${secondsStr}`;
+  }
   return `${hoursStr}:${minutesStr}:${secondsStr}`;
 }
 
@@ -23,7 +31,7 @@ export const useChat = (
   const [inputText, setInputText] = useState<string>('');
   const [messages, setMessages] = useState<Tables['messages']['Row'][]>(initialMessages);
   const { addMessageMutation } = useMutateMessage();
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<SuggestionType[]>([]);
 
   const addMessageFunc = async () => {
     const newMessage: Tables['messages']['Row'] = {
@@ -62,20 +70,14 @@ export const useChat = (
         }),
       });
       const data = await response.json();
-      const suggestionList = ['\n以下に質問に関連のある箇所を表示します。\n'];
+      const suggestionList = [];
       for (let i = 0; i < resultList.length; i += 1) {
         if (resultList[i].similarity > 0.8)
-          suggestionList.push(
-            [
-              '\n',
-              formatSecondsToHMS(resultList[i].segment.start),
-              '〜',
-              formatSecondsToHMS(resultList[i].segment.end),
-              '\n\n',
-              resultList[i].segment.text,
-              '\n',
-            ].join('')
-          );
+          suggestionList.push({
+            start: formatSecondsToHMS(resultList[i].segment.start),
+            end: formatSecondsToHMS(resultList[i].segment.end),
+            text: resultList[i].segment.text,
+          });
       }
       setSuggestions(suggestionList);
       const resMessage: Tables['messages']['Row'] = {

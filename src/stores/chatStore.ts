@@ -4,6 +4,7 @@ import { Tables } from '@/types/customSupabase';
 
 type ChatState = {
   setChat: (payload: Tables['chats']['Row']) => void;
+  setTitle: (payload: string) => void;
   resetChat: () => void;
 } & Tables['chats']['Row'];
 
@@ -24,6 +25,15 @@ const useChatStore = create<ChatState>()(
           false,
           'setChat'
         ),
+      setTitle: (payload) =>
+        set(
+          {
+            title: payload,
+          },
+          false,
+          'setChat'
+        ),
+
       resetChat: () => set({}, false, 'resetChat'),
     }),
     { name: 'chat-state' }

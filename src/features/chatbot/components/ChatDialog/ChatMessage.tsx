@@ -1,20 +1,10 @@
 /* eslint-disable react/no-children-prop */
-import {
-  Box,
-  Button,
-  Collapse,
-  Flex,
-  Group,
-  Spoiler,
-  ThemeIcon,
-  createStyles,
-  Text,
-  Stack,
-} from '@mantine/core';
+import { Box, Flex, ThemeIcon, createStyles, Text, Stack, Accordion, Divider } from '@mantine/core';
 import { AiOutlineUser } from 'react-icons/ai';
 import ReactMarkdown from 'react-markdown';
 import { Tables } from '@/types/customSupabase';
-import { useDisclosure } from '@mantine/hooks';
+import React from 'react';
+import { SuggestionType } from '../../hooks/useChat';
 
 const useStyles = createStyles((theme, role: string) => ({
   container: {
@@ -44,10 +34,9 @@ export const ChatMessage = ({
   suggestions,
 }: {
   message: Tables['messages']['Row'];
-  suggestions: string[];
+  suggestions: SuggestionType[];
 }) => {
   const { classes } = useStyles(message.role || '');
-
   return (
     <div className={classes.container}>
       <Flex gap="sm" wrap="nowrap" p="md" className={classes.flexWrapper}>
@@ -60,15 +49,39 @@ export const ChatMessage = ({
         )}
         <div className={classes.text}>
           <ReactMarkdown>{message.content || ''}</ReactMarkdown>
-          {message.role === 'system' && suggestions && (
-            <Spoiler maxHeight={0} showLabel="Show more" hideLabel="Hide" transitionDuration={500}>
-              <Stack>
-                {suggestions &&
-                  suggestions.map((item) => {
-                    return <p key={item}>{item}</p>;
+          {message.role === 'system' && suggestions.length > 0 && (
+            <Accordion
+              defaultValue="customization"
+              styles={{
+                item: {
+                  backgroundColor: 'white',
+                  border: `1px solid #dedede`,
+                },
+              }}
+            >
+              <Accordion.Item value="customization">
+                <Accordion.Control>もしかしてこの箇所ですか？</Accordion.Control>
+                <Accordion.Panel>
+                  {suggestions.map((item) => {
+                    return (
+                      <Stack key={`${item.start}~${item.end}`}>
+                        <Box>
+                          <Divider />
+                          <Box p="md">
+                            <Flex wrap="nowrap">
+                              <Text c="blue">{`${item.start}`}</Text>
+                              <Text px="xs">~</Text>
+                              <Text c="blue">{`${item.end}`}</Text>
+                            </Flex>
+                            <Text fz="sm">{item.text}</Text>
+                          </Box>
+                        </Box>
+                      </Stack>
+                    );
                   })}
-              </Stack>
-            </Spoiler>
+                </Accordion.Panel>
+              </Accordion.Item>
+            </Accordion>
           )}
         </div>
       </Flex>

@@ -3,8 +3,11 @@
 import { useMutation } from 'react-query';
 import { convertToVTT } from '@/utils/segmentsToVTT';
 import { videoToAudio } from '@/utils/videoToAudio';
-import { Segment } from '@/types/customSupabase';
+import { Segment, Tables } from '@/types/customSupabase';
 import { compressSegments } from '@/utils/compressSegments';
+import { supabase } from '@/lib/supabase';
+import { shallow } from 'zustand/shallow';
+import useChatStore from '@/stores/chatStore';
 import { useUploadVtt } from './useUploadVtt';
 import { useMutateNodsPage } from './useMutateNodsPage';
 
@@ -24,7 +27,21 @@ interface compressSegmentsType {
 export const useMutateHandler = () => {
   const { useMutateUploadVtt } = useUploadVtt();
   const { updateNodsPageMutation } = useMutateNodsPage();
+  const id = useChatStore((state) => state.id, shallow);
+  const setTitle = useChatStore((state) => state.setTitle, shallow);
 
+  const updateChatMutation = useMutation(
+    async (chat: Tables['chats']['Update']) => {
+      const { error } = await supabase.from('chats').update(chat).eq('id', id);
+
+      if (error) throw new Error(error.message);
+    },
+    {
+      onError: (err: any) => {
+        alert(err.message);
+      },
+    }
+  );
   const summarisedVttMutation = useMutation(
     async (input: SummarizedVttType) => {
       const { vttText, nodsPageId } = input;
@@ -41,6 +58,28 @@ export const useMutateHandler = () => {
       const blob = new Blob([resp_summerize], { type: 'text/vtt' });
       const file = new File([blob], 'text.vtt', { type: 'text/vtt' });
       useMutateUploadVtt.mutate({ files: [file], nodsPageId });
+    },
+    {
+      onError: (err: any) => {
+        alert(err.message);
+      },
+    }
+  );
+
+  const videoTitleMutation = useMutation(
+    async (vttText: string) => {
+      const response = await fetch('/api/openai/generate-title', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          vttText,
+        }),
+      });
+      const title: string = await response.json();
+      updateChatMutation.mutate({ title });
+      setTitle(title);
     },
     {
       onError: (err: any) => {
@@ -100,6 +139,7 @@ export const useMutateHandler = () => {
       compressSegmentsMutation.mutate({ segments, nodsPageId });
       const vttText = convertToVTT(segments);
       summarisedVttMutation.mutate({ vttText, nodsPageId });
+      videoTitleMutation.mutate(vttText);
     },
     {
       onError: (err: any) => {

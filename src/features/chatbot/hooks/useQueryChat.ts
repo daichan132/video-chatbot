@@ -3,7 +3,7 @@ import { Tables } from 'src/types/customSupabase';
 import { supabase } from '@/lib/supabase';
 import { useEffect } from 'react';
 import { shallow } from 'zustand/shallow';
-import useChatStore from '../store/chatStore';
+import useChatStore from '../../../stores/chatStore';
 
 export const useQueryChat = (chatId: string) => {
   const setChat = useChatStore((state) => state.setChat, shallow);
@@ -32,7 +32,8 @@ export const useQueryChat = (chatId: string) => {
   const queryInstance = useQuery<Tables['chats']['Row'], Error>({
     queryKey: [`chat-${chatId}`],
     queryFn: getChat,
-    staleTime: Infinity,
+    cacheTime: 0,
+    staleTime: 0,
   });
   useEffect(() => {
     if (queryInstance.data) {

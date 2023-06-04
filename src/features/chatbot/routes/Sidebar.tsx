@@ -7,15 +7,19 @@ import { shallow } from 'zustand/shallow';
 import { css } from '@emotion/react';
 import { useMutateChat } from '../hooks/useMutateChat';
 import { useQueryAllChats } from '../hooks/useQueryAllChats';
-import useChatStore from '../store/chatStore';
+import useChatStore from '../../../stores/chatStore';
 
 export const Sidebar: FC = () => {
   const id = useChatStore((state) => state.id, shallow);
+  const title = useChatStore((state) => state.title, shallow);
   const { addChatMutation, deleteChatMutation } = useMutateChat();
   const { data: chats, isLoading, refetch } = useQueryAllChats();
   useEffect(() => {
     if (deleteChatMutation.isSuccess || addChatMutation.isSuccess) refetch();
   }, [deleteChatMutation.isSuccess, addChatMutation.isSuccess, refetch]);
+  useEffect(() => {
+    if (title) refetch();
+  }, [title, refetch]);
   return (
     <Stack>
       <Button
@@ -52,7 +56,7 @@ export const Sidebar: FC = () => {
                 }}
               >
                 <Text mr={100} weight="normal" w="100%" size="sm">
-                  {chat.title}
+                  {chat.id === id ? title : chat.title}
                 </Text>
               </Button>
               <Flex wrap="nowrap" sx={{ position: 'absolute', right: 10, zIndex: 10, top: 6 }}>

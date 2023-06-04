@@ -8,13 +8,13 @@ import {
   MediaChaptersMenuItems,
   MediaMenu,
 } from '@vidstack/react';
-import { Box, Flex } from '@mantine/core';
+import { Box, Flex, Tooltip } from '@mantine/core';
 
 export const VideoPlayer = ({
   src,
   title = 'test',
   poster = '',
-  vttfile = '/sample.vtt',
+  vttfile = '',
 }: {
   src: string;
   title?: string;
@@ -22,16 +22,26 @@ export const VideoPlayer = ({
   vttfile?: string;
 }) => {
   return (
-    <MediaPlayer title={title} src={src} poster={poster} crossorigin="anonymous" controls>
+    <MediaPlayer
+      title={title}
+      src={src}
+      poster={poster}
+      crossorigin="anonymous"
+      controls
+      aspect-ratio={16 / 9}
+      style={{ borderRadius: 10, overflow: 'hidden' }}
+    >
       <MediaOutlet>
         <track src={vttfile} srcLang="en-US" kind="chapters" default />
       </MediaOutlet>
       <Box sx={{ position: 'absolute', zIndex: 1, inset: 0, pointerEvents: 'none' }}>
-        <Flex sx={{ pointerEvents: 'auto' }}>
-          <MediaMenu position="bottom left">
-            <MediaMenuButton aria-label="Chapters">
-              <ChaptersIcon />
-            </MediaMenuButton>
+        <Flex sx={{ pointerEvents: 'auto' }} justify="end">
+          <MediaMenu position="bottom right">
+            <Tooltip label="Chapter">
+              <MediaMenuButton aria-label="Chapters">
+                <ChaptersIcon />
+              </MediaMenuButton>
+            </Tooltip>
             <MediaChaptersMenuItems />
           </MediaMenu>
         </Flex>
