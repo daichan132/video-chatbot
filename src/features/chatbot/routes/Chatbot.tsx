@@ -25,7 +25,7 @@ export const Chatbot = ({
 }) => {
   const { classes } = useStyles();
   const loading = false;
-  const { inputText, setInputText, messages, addMessageFunc } = useChat(
+  const { inputText, setInputText, messages, addMessageFunc, suggestions } = useChat(
     currentChat,
     initialMessages,
     page_id
@@ -33,7 +33,7 @@ export const Chatbot = ({
 
   return (
     <Paper className={classes.container} shadow="xl" p={0} radius="md">
-      <ChatDialog messages={messages} />
+      <ChatDialog messages={messages} suggestions={suggestions} />
       <ChatTextInput
         inputText={inputText}
         setInputText={setInputText}
