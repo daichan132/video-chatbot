@@ -1,6 +1,5 @@
-import { UnstyledButton, UnstyledButtonProps, Group, Avatar, Text } from '@mantine/core';
+import { UnstyledButton, UnstyledButtonProps, Avatar, Text, Flex } from '@mantine/core';
 import { forwardRef } from 'react';
-import { BsThreeDotsVertical } from 'react-icons/bs';
 
 interface UserButtonProps extends UnstyledButtonProps {
   image: string;
@@ -9,7 +8,7 @@ interface UserButtonProps extends UnstyledButtonProps {
 }
 
 export const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(function UserButton(
-  { image, name, icon, ...others }: UserButtonProps,
+  { image, name, ...others }: UserButtonProps,
   ref
 ) {
   return (
@@ -29,16 +28,18 @@ export const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(functio
       })}
       {...others}
     >
-      <Group spacing={8}>
+      <Flex gap="md" justify="flex-start" align="center" direction="row">
         <Avatar src={image} size={28} />
-        <div style={{ flex: 1 }}>
-          <Text size="sm" weight={500}>
+        <Flex gap="md" justify="flex-start" align="center" direction="row">
+          <Text
+            size="sm"
+            weight={500}
+            sx={{ textOverflow: 'ellipsis', overflow: 'hidden', width: '60%' }}
+          >
             {name}
           </Text>
-        </div>
-
-        {icon || <BsThreeDotsVertical size="0.9rem" />}
-      </Group>
+        </Flex>
+      </Flex>
     </UnstyledButton>
   );
 });
