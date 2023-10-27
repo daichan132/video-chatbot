@@ -15,6 +15,7 @@ export default async function handler(req: NextApiRequest, response: NextApiResp
     const sanitizedQuery = question.trim();
 
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    console.log('vector search was called');
 
     const getEmbedding = async (content: string) => {
       const embeddingResponse = await openai.embeddings.create({
