@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Configuration, OpenAIApi } from 'openai';
+import { OpenAI } from 'openai';
 import { codeBlock, oneLine } from 'common-tags';
 
 export default async function handler(req: NextApiRequest, response: NextApiResponse) {
@@ -21,13 +21,10 @@ export default async function handler(req: NextApiRequest, response: NextApiResp
     
     Answer as markdown (including related code snippets if available):
     `;
-    const configuration = new Configuration({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
-    const openai = new OpenAIApi(configuration);
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
     const req_function = async () => {
-      const res = await openai.createCompletion({
+      const res = await openai.completions.create({
         model: 'text-davinci-003',
         prompt,
         max_tokens: 512,
@@ -36,7 +33,7 @@ export default async function handler(req: NextApiRequest, response: NextApiResp
       return res;
     };
     const res_completion = await req_function();
-    const { choices } = res_completion.data;
+    const { choices } = res_completion;
 
     if (choices.length === 0) throw new Error('choices is none.');
     const { text: vttTextResult } = choices[0];

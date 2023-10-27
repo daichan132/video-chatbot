@@ -1,13 +1,9 @@
-import { Configuration, OpenAIApi } from 'openai';
+import { OpenAI } from 'openai';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import formidable, { File } from 'formidable';
 import fs from 'fs';
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-const openai = new OpenAIApi(configuration);
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const form = formidable({ multiples: true, keepExtensions: true });
 
@@ -23,26 +19,23 @@ export const config = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const fileContent = await new Promise((resolve, reject) => {
+    const filepath = await new Promise<string>((resolve, reject) => {
       form.parse(req, (err, _fields, files) => {
         if (isFile(files.file)) {
-          resolve(fs.createReadStream(files.file.filepath));
+          resolve(files.file.filepath);
         }
         return reject(new Error('file is not found'));
       });
     });
 
-    const response = await openai.createTranscription(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      fileContent as any,
-      'whisper-1',
-      undefined,
-      'verbose_json'
-    );
-    const { data } = response;
-    res.status(200).json({ data });
+    const response = await openai.audio.transcriptions.create({
+      file: fs.createReadStream(filepath),
+      model: 'whisper-1',
+      response_format: 'verbose_json',
+    });
+    res.status(200).json(response);
   } catch (error) {
     // console.error(error);
-    res.status(500).send('Something went wrong');
+    res.status(500).send({ error });
   }
 }

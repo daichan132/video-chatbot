@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import GPT3Tokenizer from 'gpt3-tokenizer';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { Database, Json } from '@/types/supabase';
-import { Configuration, OpenAIApi } from 'openai';
+import { OpenAI } from 'openai';
 import { Segment } from '@/types/customSupabase';
 
 export default async function handler(req: NextApiRequest, response: NextApiResponse) {
@@ -14,21 +14,18 @@ export default async function handler(req: NextApiRequest, response: NextApiResp
   try {
     const sanitizedQuery = question.trim();
 
-    const configuration = new Configuration({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
-    const openai = new OpenAIApi(configuration);
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
     const getEmbedding = async (content: string) => {
-      const embeddingResponse = await openai.createEmbedding({
+      const embeddingResponse = await openai.embeddings.create({
         model: 'text-embedding-ada-002',
         input: content,
       });
       return embeddingResponse.data;
     };
 
-    const { data: emb_res_data } = await getEmbedding(sanitizedQuery);
-    const { embedding } = emb_res_data[0];
+    const data = await getEmbedding(sanitizedQuery);
+    const { embedding } = data[0];
 
     const { data: pageSections } = await supabaseServerClient.rpc('match_page_sections', {
       embedding: embedding as unknown as string,

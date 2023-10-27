@@ -31,6 +31,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       template: QA_PROMPT,
     });
     const chain = new LLMChain({ llm, prompt: qa_prompt });
+    console.log(`
+    「動画の内容」
+    ${context}
+    
+    「会話履歴」
+    ${chat_history}
+    
+    「質問」: ${question.content}
+    `);
     const result = await chain.call({
       input: `
 「動画の内容」
@@ -42,15 +51,7 @@ ${chat_history}
 「質問」: ${question.content}
 `,
     });
-    console.log(`
-「動画の内容」
-${context}
-
-「会話履歴」
-${chat_history}
-
-「質問」: ${question.content}
-`);
+    console.log(result.text);
     res.status(200).json({ res: result.text });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {

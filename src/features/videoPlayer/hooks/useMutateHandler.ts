@@ -112,15 +112,16 @@ export const useMutateHandler = () => {
   const transcriptMutation = useMutation(
     async (input: TranscriptType) => {
       const { file, nodsPageId } = input;
-      const formData = await videoToAudio(file);
+      const formData = await videoToAudio(file).then((data) => {
+        return data;
+      });
       const response_transcript = await fetch(`/api/openai/whisper`, {
         method: 'POST',
         body: formData,
       });
       const transcript_data = await response_transcript.json();
-      const { data } = transcript_data;
 
-      const segments = data.segments.map((segment: any) => ({
+      const segments = transcript_data.segments.map((segment: any) => ({
         id: segment.id,
         start: segment.start,
         end: segment.end,
@@ -129,10 +130,7 @@ export const useMutateHandler = () => {
       }));
       updateNodsPageMutation.mutate({
         nods_page: {
-          meta: {
-            ...data,
-            segments,
-          },
+          meta: transcript_data,
         },
         nodsPageId,
       });
