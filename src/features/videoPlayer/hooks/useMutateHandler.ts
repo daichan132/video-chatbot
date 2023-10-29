@@ -123,7 +123,6 @@ export const useMutateHandler = () => {
       //   }),
       // });
       const body = JSON.stringify({
-        page_id: nodsPageId,
         segments: compressSegments(segments),
       });
       const resultList = (await api_call_post('/api/openai/generate-embeddings', body)) as Result[];

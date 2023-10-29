@@ -9,7 +9,7 @@ interface Segment {
   // other fields omitted for simplicity
 }
 
-async function generate_embeddings(page_id: number, segments: Segment[]) {
+async function generate_embeddings(segments: Segment[]) {
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
   const getEmbedding = async (segment: Segment) => {
