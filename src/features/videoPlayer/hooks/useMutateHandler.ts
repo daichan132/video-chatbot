@@ -161,8 +161,18 @@ export const useMutateHandler = () => {
       //   body: formData,
       // });
       // const transcript_data = await response_transcript.json();
+      type wisperResponseBody = {
+        task: string;
+        segments: Segment[];
+        duration: number;
+        language: string;
+        text: string;
+      };
 
-      const transcript_data = await api_call_post_formdata(`/api/openai/whisper`, formData);
+      const transcript_data = (await api_call_post_formdata(
+        `/api/openai/whisper`,
+        formData
+      )) as wisperResponseBody;
       console.log(transcript_data);
 
       const segments = transcript_data?.segments.map((segment: any) => ({
@@ -174,7 +184,7 @@ export const useMutateHandler = () => {
       }));
       updateNodsPageMutation.mutate({
         nods_page: {
-          meta: transcript_data as Json,
+          meta: transcript_data as unknown as Json,
         },
         nodsPageId,
       });
