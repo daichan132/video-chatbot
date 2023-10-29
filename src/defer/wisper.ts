@@ -1,5 +1,4 @@
 import { OpenAI } from 'openai';
-import type { NextApiRequest, NextApiResponse } from 'next';
 import fs from 'fs';
 import { defer } from '@defer/client';
 

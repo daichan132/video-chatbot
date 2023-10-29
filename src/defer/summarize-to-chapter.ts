@@ -1,4 +1,3 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import { OpenAI } from 'openai';
 import { codeBlock, oneLine } from 'common-tags';
 import { defer } from '@defer/client';

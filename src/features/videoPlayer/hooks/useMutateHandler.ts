@@ -9,6 +9,7 @@ import { supabase } from '@/lib/supabase';
 import { shallow } from 'zustand/shallow';
 import useChatStore from '@/stores/chatStore';
 import { api_call_post, api_call_post_formdata } from '@/lib/apicall';
+import { Json } from '@/types/supabase';
 import { useUploadVtt } from './useUploadVtt';
 import { useMutateNodsPage } from './useMutateNodsPage';
 
@@ -61,12 +62,12 @@ export const useMutateHandler = () => {
       //   }),
       // });
       // const resp_summerize: string = await response.json();
-      const resp_summerize: string = await api_call_post(
+      const resp_summerize = (await api_call_post(
         '/api/openai/summarize-to-chapter',
         JSON.stringify({
           vttText,
         })
-      );
+      )) as string;
       const blob = new Blob([resp_summerize], { type: 'text/vtt' });
       const file = new File([blob], 'text.vtt', { type: 'text/vtt' });
       useMutateUploadVtt.mutate({ files: [file], nodsPageId });
@@ -90,12 +91,12 @@ export const useMutateHandler = () => {
       //   }),
       // });
       // const title: string = await response.json();
-      const title: string = await api_call_post(
+      const title = (await api_call_post(
         '/api/openai/generate-title',
         JSON.stringify({
           vttText,
         })
-      );
+      )) as string;
 
       updateChatMutation.mutate({ title });
       setTitle(title);
@@ -138,7 +139,7 @@ export const useMutateHandler = () => {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           segment: result_.segment as any,
         };
-        const d = await supabase.from('nods_page_section').insert(row).select().limit(1).single();
+        await supabase.from('nods_page_section').insert(row).select().limit(1).single();
       });
     },
     {
@@ -160,9 +161,12 @@ export const useMutateHandler = () => {
       // });
       // const transcript_data = await response_transcript.json();
 
-      const transcript_data = await api_call_post_formdata(`/api/openai/whisper`, formData);
+      const transcript_data = (await api_call_post_formdata(
+        `/api/openai/whisper`,
+        formData
+      )) as Json;
 
-      const segments = transcript_data.segments.map((segment: any) => ({
+      const segments = transcript_data?.segments.map((segment: any) => ({
         id: segment.id,
         start: segment.start,
         end: segment.end,

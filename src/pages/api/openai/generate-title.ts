@@ -1,6 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { OpenAI } from 'openai';
-import { codeBlock, oneLine } from 'common-tags';
 import generate_title from '../../../defer/generate-title';
 
 export default async function handler(req: NextApiRequest, response: NextApiResponse) {

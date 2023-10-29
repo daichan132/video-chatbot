@@ -1,6 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
-import { Database } from '@/types/supabase';
 import vector_search from '../../../defer/vector-search';
 
 // deferを用いて、実行IDのみ最初に返してバックグラウンド実行

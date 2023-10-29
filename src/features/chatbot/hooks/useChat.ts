@@ -1,10 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
-import { Tables } from '@/types/customSupabase';
+import { Tables, Segment } from '@/types/customSupabase';
 import { useState } from 'react';
 import GPT3Tokenizer from 'gpt3-tokenizer';
 import { supabase } from '@/lib/supabase';
 import { Json } from '@/types/supabase';
-import { Segment } from '@/types/customSupabase';
 import OpenAI from 'openai';
 import { useMutateMessage } from './useMutateMessage';
 import { api_call_post } from '../../../lib/apicall';
@@ -109,12 +108,15 @@ export const useChat = (
 
       const suggestionList = [];
       for (let i = 0; i < resultList.length; i += 1) {
-        if (resultList[i].similarity > 0.8)
-          suggestionList.push({
-            start: formatSecondsToHMS(resultList[i].segment.start),
-            end: formatSecondsToHMS(resultList[i].segment.end),
-            text: resultList[i].segment.text,
-          });
+        if (resultList[i].similarity > 0.8) {
+          if (resultList[i].segment) {
+            suggestionList.push({
+              start: formatSecondsToHMS(resultList[i].segment?.start),
+              end: formatSecondsToHMS(resultList[i].segment?.end),
+              text: resultList[i].segment?.text,
+            });
+          }
+        }
       }
       setSuggestions(suggestionList);
       const resMessage: Tables['messages']['Row'] = {
@@ -128,8 +130,14 @@ export const useChat = (
       };
       setMessages((prev) => [...prev, resMessage]);
       addMessageMutation.mutate([resMessage]);
-    } catch (e: any) {
-      console.warn(e.message);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error.message);
+      } else if (typeof error === 'string') {
+        console.log(error);
+      } else {
+        console.log('unexpected error');
+      }
     }
   };
   return { inputText, setInputText, messages, addMessageFunc, suggestions };

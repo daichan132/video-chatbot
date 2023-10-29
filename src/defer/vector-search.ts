@@ -1,7 +1,3 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import GPT3Tokenizer from 'gpt3-tokenizer';
-import { SupabaseClient, createPagesServerClient } from '@supabase/auth-helpers-nextjs';
-import { Database, Json } from '@/types/supabase';
 import { OpenAI } from 'openai';
 import { defer } from '@defer/client';
 
