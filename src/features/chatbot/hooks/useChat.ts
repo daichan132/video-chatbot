@@ -1,7 +1,13 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Tables } from '@/types/customSupabase';
 import { useState } from 'react';
+import GPT3Tokenizer from 'gpt3-tokenizer';
+import { supabase } from '@/lib/supabase';
+import { Json } from '@/types/supabase';
+import { Segment } from '@/types/customSupabase';
+import OpenAI from 'openai';
 import { useMutateMessage } from './useMutateMessage';
+import { api_call_post } from '../../../lib/apicall';
 
 export type SuggestionType = {
   start: string;
@@ -46,30 +52,61 @@ export const useChat = (
     setMessages((prev) => [...prev, newMessage]);
     addMessageMutation.mutate([newMessage]);
     try {
-      // similar text data
-      const res_vector_search = await fetch('/api/openai/vector-search', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          page_id,
+      const embedding = (await api_call_post(
+        '/api/openai/vector-search',
+        JSON.stringify({
           question: newMessage.content,
-        }),
+        })
+      )) as OpenAI.Embeddings.Embedding[];
+
+      const { data: pageSections } = await supabase.rpc('match_page_sections', {
+        embedding: embedding as unknown as string,
+        match_threshold: 0.78,
+        match_count: 10,
+        min_content_length: 5,
+        page_id_in: page_id as number,
       });
-      const { contextText, resultList } = await res_vector_search.json();
-      const response = await fetch('/api/openai/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+
+      const tokenizer = new GPT3Tokenizer({ type: 'gpt3' });
+      let tokenCount = 0;
+      let contextText = '';
+      // const contextText = '';
+
+      if (pageSections == null) {
+        throw new Error('pageSections is null');
+      }
+
+      const resultList: {
+        id: number;
+        page_id: number;
+        segment: Json;
+        similarity: number;
+      }[] = [];
+
+      for (let i = 0; i < pageSections.length; i += 1) {
+        const { segment } = pageSections[i];
+        resultList.push(pageSections[i]);
+        if (segment) {
+          const { text } = segment as unknown as Segment; // TODO:fix type
+          const encoded = tokenizer.encode(text);
+          tokenCount += encoded.text.length;
+          if (tokenCount >= 1500) {
+            break;
+          }
+
+          contextText += `${text.trim()}\n---\n`;
+        }
+      }
+
+      const data = await api_call_post(
+        '/api/openai/chat',
+        JSON.stringify({
           history: messages,
           question: newMessage,
           context: contextText,
-        }),
-      });
-      const data = await response.json();
+        })
+      );
+
       const suggestionList = [];
       for (let i = 0; i < resultList.length; i += 1) {
         if (resultList[i].similarity > 0.8)

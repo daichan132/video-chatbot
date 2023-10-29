@@ -6,6 +6,7 @@ const nextConfig = {
   },
   experimental: {
     scrollRestoration: true,
+    serverMinification: false,
   },
   async headers() {
     return [

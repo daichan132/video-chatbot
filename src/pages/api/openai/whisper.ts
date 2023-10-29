@@ -1,9 +1,6 @@
-import { OpenAI } from 'openai';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import formidable, { File } from 'formidable';
-import fs from 'fs';
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+import wisper from '../../../defer/wisper';
 
 const form = formidable({ multiples: true, keepExtensions: true });
 
@@ -27,13 +24,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return reject(new Error('file is not found'));
       });
     });
-
-    const response = await openai.audio.transcriptions.create({
-      file: fs.createReadStream(filepath),
-      model: 'whisper-1',
-      response_format: 'verbose_json',
-    });
-    res.status(200).json(response);
+    const data = await wisper(filepath);
+    res.status(200).json(data);
   } catch (error) {
     // console.error(error);
     res.status(500).send({ error });

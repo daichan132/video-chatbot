@@ -8,6 +8,7 @@ import { compressSegments } from '@/utils/compressSegments';
 import { supabase } from '@/lib/supabase';
 import { shallow } from 'zustand/shallow';
 import useChatStore from '@/stores/chatStore';
+import { api_call_post, api_call_post_formdata } from '@/lib/apicall';
 import { useUploadVtt } from './useUploadVtt';
 import { useMutateNodsPage } from './useMutateNodsPage';
 
@@ -22,6 +23,11 @@ interface SummarizedVttType {
 interface compressSegmentsType {
   segments: Segment[];
   nodsPageId: number;
+}
+
+interface Result {
+  segment: Segment;
+  embedding: number[];
 }
 
 export const useMutateHandler = () => {
@@ -45,16 +51,22 @@ export const useMutateHandler = () => {
   const summarisedVttMutation = useMutation(
     async (input: SummarizedVttType) => {
       const { vttText, nodsPageId } = input;
-      const response = await fetch('/api/openai/summarize-to-chapter', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      // const response = await fetch('/api/openai/summarize-to-chapter', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     vttText,
+      //   }),
+      // });
+      // const resp_summerize: string = await response.json();
+      const resp_summerize: string = await api_call_post(
+        '/api/openai/summarize-to-chapter',
+        JSON.stringify({
           vttText,
-        }),
-      });
-      const resp_summerize: string = await response.json();
+        })
+      );
       const blob = new Blob([resp_summerize], { type: 'text/vtt' });
       const file = new File([blob], 'text.vtt', { type: 'text/vtt' });
       useMutateUploadVtt.mutate({ files: [file], nodsPageId });
@@ -68,16 +80,23 @@ export const useMutateHandler = () => {
 
   const videoTitleMutation = useMutation(
     async (vttText: string) => {
-      const response = await fetch('/api/openai/generate-title', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      // const response = await fetch('/api/openai/generate-title', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     vttText,
+      //   }),
+      // });
+      // const title: string = await response.json();
+      const title: string = await api_call_post(
+        '/api/openai/generate-title',
+        JSON.stringify({
           vttText,
-        }),
-      });
-      const title: string = await response.json();
+        })
+      );
+
       updateChatMutation.mutate({ title });
       setTitle(title);
     },
@@ -91,15 +110,35 @@ export const useMutateHandler = () => {
   const compressSegmentsMutation = useMutation(
     async (input: compressSegmentsType) => {
       const { segments, nodsPageId } = input;
-      await fetch('/api/openai/generate-embeddings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      // await fetch('/api/openai/generate-embeddings', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     page_id: nodsPageId,
+      //     segments: compressSegments(segments),
+      //   }),
+      // });
+      const body = JSON.stringify({
+        page_id: nodsPageId,
+        segments: compressSegments(segments),
+      });
+      const resultList = (await api_call_post('/api/openai/generate-embeddings', body)) as Result[];
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      console.log(resultList);
+      resultList.forEach(async (result_) => {
+        const row: Tables['nods_page_section']['Insert'] = {
           page_id: nodsPageId,
-          segments: compressSegments(segments),
-        }),
+          content: result_.segment.text,
+          embedding: result_.embedding as unknown as string,
+          owner: user?.id,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          segment: result_.segment as any,
+        };
+        const d = await supabase.from('nods_page_section').insert(row).select().limit(1).single();
       });
     },
     {
@@ -115,11 +154,13 @@ export const useMutateHandler = () => {
       const formData = await videoToAudio(file).then((data) => {
         return data;
       });
-      const response_transcript = await fetch(`/api/openai/whisper`, {
-        method: 'POST',
-        body: formData,
-      });
-      const transcript_data = await response_transcript.json();
+      // const response_transcript = await fetch(`/api/openai/whisper`, {
+      //   method: 'POST',
+      //   body: formData,
+      // });
+      // const transcript_data = await response_transcript.json();
+
+      const transcript_data = await api_call_post_formdata(`/api/openai/whisper`, formData);
 
       const segments = transcript_data.segments.map((segment: any) => ({
         id: segment.id,
