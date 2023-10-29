@@ -20,13 +20,24 @@ async function generate_embeddings(segments: Segment[]) {
     return embeddingResponse.data;
   };
 
-  return Promise.all(
-    segments.map(async (segment) => {
-      const data = await getEmbedding(segment);
-      const { embedding } = data[0];
-      return { segment, embedding };
-    })
-  );
+  const res = [];
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const segment of segments) {
+    // eslint-disable-next-line no-await-in-loop
+    const data = await getEmbedding(segment);
+    const { embedding } = data[0];
+    res.push({ segment, embedding });
+  }
+  return res;
+
+  // return Promise.all(
+  //   segments.map(async (segment) => {
+  //     const data = await getEmbedding(segment);
+  //     const { embedding } = data[0];
+  //     return { segment, embedding };
+  //   })
+  // );
 }
 
 export default defer(generate_embeddings);
