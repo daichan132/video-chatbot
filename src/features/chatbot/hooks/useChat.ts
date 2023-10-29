@@ -78,13 +78,20 @@ export const useChat = (
       const resultList: {
         id: number;
         page_id: number;
-        segment: Json;
+        segment: Segment;
         similarity: number;
       }[] = [];
 
       for (let i = 0; i < pageSections.length; i += 1) {
         const { segment } = pageSections[i];
-        resultList.push(pageSections[i]);
+        resultList.push(
+          pageSections[i] as unknown as {
+            id: number;
+            page_id: number;
+            segment: Segment;
+            similarity: number;
+          }
+        );
         if (segment) {
           const { text } = segment as unknown as Segment; // TODO:fix type
           const encoded = tokenizer.encode(text);
@@ -97,20 +104,21 @@ export const useChat = (
         }
       }
 
-      const data = await api_call_post(
+      const data = (await api_call_post(
         '/api/openai/chat',
         JSON.stringify({
           history: messages,
           question: newMessage,
           context: contextText,
         })
-      );
+      )) as string;
 
       const suggestionList = [];
       for (let i = 0; i < resultList.length; i += 1) {
         if (resultList[i].similarity > 0.8) {
-          if (resultList[i].segment) {
+          if (resultList[i].segment && resultList[i].segment) {
             suggestionList.push({
+              // start: formatSecondsToHMS(resultList[i].segment?["start"]),
               start: formatSecondsToHMS(resultList[i].segment?.start),
               end: formatSecondsToHMS(resultList[i].segment?.end),
               text: resultList[i].segment?.text,
@@ -120,13 +128,13 @@ export const useChat = (
       }
       setSuggestions(suggestionList);
       const resMessage: Tables['messages']['Row'] = {
-        content: [data.res].join('\n'),
+        content: [data].join('\n'),
         role: 'system',
         chat: currentChat.id,
         id: uuidv4(),
         created_at: new Date().toISOString(),
         owner: currentChat.owner,
-        suggestions: resultList, // TODO: テーブル再定義（質問の根拠になる動画の箇所をsuggest）
+        suggestions: resultList as unknown as Json[], // TODO: テーブル再定義（質問の根拠になる動画の箇所をsuggest）
       };
       setMessages((prev) => [...prev, resMessage]);
       addMessageMutation.mutate([resMessage]);

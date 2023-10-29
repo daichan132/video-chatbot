@@ -62,7 +62,7 @@ ${chat_history}
 `,
   });
   console.log(result.text);
-  return { res: result.text };
+  return result.text;
 }
 
 export default defer(chat);

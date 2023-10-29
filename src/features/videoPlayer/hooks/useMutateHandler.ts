@@ -10,6 +10,7 @@ import { shallow } from 'zustand/shallow';
 import useChatStore from '@/stores/chatStore';
 import { api_call_post, api_call_post_formdata } from '@/lib/apicall';
 import { Json } from '@/types/supabase';
+import OpenAI from 'openai';
 import { useUploadVtt } from './useUploadVtt';
 import { useMutateNodsPage } from './useMutateNodsPage';
 
@@ -161,10 +162,8 @@ export const useMutateHandler = () => {
       // });
       // const transcript_data = await response_transcript.json();
 
-      const transcript_data = (await api_call_post_formdata(
-        `/api/openai/whisper`,
-        formData
-      )) as Json;
+      const transcript_data = await api_call_post_formdata(`/api/openai/whisper`, formData);
+      console.log(transcript_data);
 
       const segments = transcript_data?.segments.map((segment: any) => ({
         id: segment.id,
@@ -175,7 +174,7 @@ export const useMutateHandler = () => {
       }));
       updateNodsPageMutation.mutate({
         nods_page: {
-          meta: transcript_data,
+          meta: transcript_data as Json,
         },
         nodsPageId,
       });
