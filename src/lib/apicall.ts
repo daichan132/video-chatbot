@@ -22,6 +22,7 @@ export const api_call_get = async (path: string) => {
           clearInterval(interval_id);
         } else if (data.res.state === 'failed') {
           console.log(data.res.result.cause.message);
+          clearInterval(interval_id);
           reject(new Error(data.res.result.cause.message));
         }
       }
@@ -59,6 +60,7 @@ export const api_call_post = async (path: string, body: string) => {
           clearInterval(interval_id);
         } else if (data.res.state === 'failed') {
           console.log(data.res.result.cause.message);
+          clearInterval(interval_id);
           reject(new Error(data.res.result.cause.message));
         }
       }
@@ -93,6 +95,7 @@ export const api_call_post_formdata = async (path: string, body: FormData) => {
           clearInterval(interval_id);
         } else if (data.res.state === 'failed') {
           console.log(data.res.result.cause.message);
+          clearInterval(interval_id);
           reject(new Error(data.res.result.cause.message));
         }
       }
