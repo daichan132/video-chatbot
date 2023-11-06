@@ -10,6 +10,7 @@ interface Segment {
 }
 
 async function generate_embeddings(segments: Segment[]) {
+  console.log(segments);
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
   const getEmbedding = async (segment: Segment) => {
@@ -17,7 +18,6 @@ async function generate_embeddings(segments: Segment[]) {
       model: 'text-embedding-ada-002',
       input: segment.text,
     });
-    console.log(embeddingResponse);
     return embeddingResponse.data;
   };
 
@@ -25,20 +25,14 @@ async function generate_embeddings(segments: Segment[]) {
 
   // eslint-disable-next-line no-restricted-syntax
   for (const segment of segments) {
+    console.log(segment);
     // eslint-disable-next-line no-await-in-loop
     const data = await getEmbedding(segment);
     const { embedding } = data[0];
+    console.log(embedding);
     res.push({ segment, embedding });
   }
   return res;
-
-  // return Promise.all(
-  //   segments.map(async (segment) => {
-  //     const data = await getEmbedding(segment);
-  //     const { embedding } = data[0];
-  //     return { segment, embedding };
-  //   })
-  // );
 }
 
 export default defer(generate_embeddings, {
