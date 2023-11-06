@@ -41,4 +41,6 @@ async function generate_embeddings(segments: Segment[]) {
   // );
 }
 
-export default defer(generate_embeddings);
+export default defer(generate_embeddings, {
+  concurrency: 2,
+});

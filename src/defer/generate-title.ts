@@ -35,4 +35,6 @@ async function generate_title(vttText: string) {
   return vttTextResult;
 }
 
-export default defer(generate_title);
+export default defer(generate_title, {
+  concurrency: 2,
+});

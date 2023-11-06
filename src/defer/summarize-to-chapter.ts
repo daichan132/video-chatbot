@@ -40,4 +40,6 @@ async function summarize_to_chapter(vttText: string) {
   return vttTextResult;
 }
 
-export default defer(summarize_to_chapter);
+export default defer(summarize_to_chapter, {
+  concurrency: 2,
+});

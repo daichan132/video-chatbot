@@ -14,4 +14,6 @@ async function wisper(filepath: string) {
   return response;
 }
 
-export default defer(wisper);
+export default defer(wisper, {
+  concurrency: 2,
+});

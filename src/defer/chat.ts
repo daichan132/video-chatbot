@@ -65,4 +65,6 @@ ${chat_history}
   return result.text;
 }
 
-export default defer(chat);
+export default defer(chat, {
+  concurrency: 2,
+});

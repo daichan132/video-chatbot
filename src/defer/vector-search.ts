@@ -21,4 +21,6 @@ async function vector_search(question: string) {
   return embedding;
 }
 
-export default defer(vector_search);
+export default defer(vector_search, {
+  concurrency: 2,
+});
