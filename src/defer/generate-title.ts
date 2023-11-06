@@ -36,5 +36,6 @@ async function generate_title(vttText: string) {
 }
 
 export default defer(generate_title, {
-  concurrency: 2,
+  concurrency: 1,
+  retry: 5,
 });

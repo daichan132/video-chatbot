@@ -42,5 +42,6 @@ async function generate_embeddings(segments: Segment[]) {
 }
 
 export default defer(generate_embeddings, {
-  concurrency: 2,
+  concurrency: 1,
+  retry: 5,
 });

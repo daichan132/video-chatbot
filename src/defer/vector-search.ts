@@ -22,5 +22,6 @@ async function vector_search(question: string) {
 }
 
 export default defer(vector_search, {
-  concurrency: 2,
+  concurrency: 1,
+  retry: 5,
 });

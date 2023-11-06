@@ -41,5 +41,6 @@ async function summarize_to_chapter(vttText: string) {
 }
 
 export default defer(summarize_to_chapter, {
-  concurrency: 2,
+  concurrency: 1,
+  retry: 5,
 });

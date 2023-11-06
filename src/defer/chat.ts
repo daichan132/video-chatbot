@@ -66,5 +66,6 @@ ${chat_history}
 }
 
 export default defer(chat, {
-  concurrency: 2,
+  concurrency: 1,
+  retry: 5,
 });

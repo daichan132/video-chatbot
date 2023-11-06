@@ -15,5 +15,6 @@ async function wisper(filepath: string) {
 }
 
 export default defer(wisper, {
-  concurrency: 2,
+  concurrency: 1,
+  retry: 5,
 });
