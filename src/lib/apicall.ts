@@ -12,7 +12,7 @@ export const api_call_get = async (path: string) => {
   };
   const id = await handle_start();
   let interval_id: NodeJS.Timer;
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     interval_id = setInterval(async () => {
       console.log(path);
       const data = await handle_inquiry(id);
@@ -20,6 +20,9 @@ export const api_call_get = async (path: string) => {
         if (data.res.state === 'succeed') {
           resolve(data.res.result);
           clearInterval(interval_id);
+        } else if (data.res.state === 'failed') {
+          console.log(data.res.result.cause.message);
+          reject(new Error(data.res.result.cause.message));
         }
       }
     }, 5000);
@@ -46,7 +49,7 @@ export const api_call_post = async (path: string, body: string) => {
   };
   const id = await handle_start();
   let interval_id: NodeJS.Timer;
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     interval_id = setInterval(async () => {
       console.log(path);
       const data = await handle_inquiry(id);
@@ -54,6 +57,9 @@ export const api_call_post = async (path: string, body: string) => {
         if (data.res.state === 'succeed') {
           resolve(data.res.result);
           clearInterval(interval_id);
+        } else if (data.res.state === 'failed') {
+          console.log(data.res.result.cause.message);
+          reject(new Error(data.res.result.cause.message));
         }
       }
     }, 5000);
@@ -77,7 +83,7 @@ export const api_call_post_formdata = async (path: string, body: FormData) => {
   };
   const id = await handle_start();
   let interval_id: NodeJS.Timer;
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     interval_id = setInterval(async () => {
       console.log(path);
       const data = await handle_inquiry(id);
@@ -85,6 +91,9 @@ export const api_call_post_formdata = async (path: string, body: FormData) => {
         if (data.res.state === 'succeed') {
           resolve(data.res.result);
           clearInterval(interval_id);
+        } else if (data.res.state === 'failed') {
+          console.log(data.res.result.cause.message);
+          reject(new Error(data.res.result.cause.message));
         }
       }
     }, 5000);

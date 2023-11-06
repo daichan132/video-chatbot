@@ -10,7 +10,6 @@ import { shallow } from 'zustand/shallow';
 import useChatStore from '@/stores/chatStore';
 import { api_call_post, api_call_post_formdata } from '@/lib/apicall';
 import { Json } from '@/types/supabase';
-import OpenAI from 'openai';
 import { useUploadVtt } from './useUploadVtt';
 import { useMutateNodsPage } from './useMutateNodsPage';
 
