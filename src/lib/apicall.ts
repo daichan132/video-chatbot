@@ -14,6 +14,7 @@ export const api_call_get = async (path: string) => {
   let interval_id: NodeJS.Timer;
   return new Promise((resolve) => {
     interval_id = setInterval(async () => {
+      console.log(path);
       const data = await handle_inquiry(id);
       if (data != null) {
         if (data.res.state === 'succeed') {
@@ -47,6 +48,7 @@ export const api_call_post = async (path: string, body: string) => {
   let interval_id: NodeJS.Timer;
   return new Promise((resolve) => {
     interval_id = setInterval(async () => {
+      console.log(path);
       const data = await handle_inquiry(id);
       if (data != null) {
         if (data.res.state === 'succeed') {
@@ -77,6 +79,7 @@ export const api_call_post_formdata = async (path: string, body: FormData) => {
   let interval_id: NodeJS.Timer;
   return new Promise((resolve) => {
     interval_id = setInterval(async () => {
+      console.log(path);
       const data = await handle_inquiry(id);
       if (data != null) {
         if (data.res.state === 'succeed') {
