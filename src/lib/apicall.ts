@@ -17,9 +17,13 @@ export const api_call_get = async (path: string) => {
       console.log(path);
       const data = await handle_inquiry(id);
       if (data != null) {
-        if (data.res.state === 'succeed') {
-          resolve(data.res.result);
+        if (data.res.status === 500) {
           clearInterval(interval_id);
+          reject(new Error('500'));
+        }
+        if (data.res.state === 'succeed') {
+          clearInterval(interval_id);
+          resolve(data.res.result);
         } else if (data.res.state === 'failed') {
           console.log(data.res.result.cause.message);
           clearInterval(interval_id);
@@ -55,9 +59,13 @@ export const api_call_post = async (path: string, body: string) => {
       console.log(path);
       const data = await handle_inquiry(id);
       if (data != null) {
-        if (data.res.state === 'succeed') {
-          resolve(data.res.result);
+        if (data.res.status === 500) {
           clearInterval(interval_id);
+          reject(new Error('500'));
+        }
+        if (data.res.state === 'succeed') {
+          clearInterval(interval_id);
+          resolve(data.res.result);
         } else if (data.res.state === 'failed') {
           console.log(data.res.result.cause.message);
           clearInterval(interval_id);
@@ -90,9 +98,13 @@ export const api_call_post_formdata = async (path: string, body: FormData) => {
       console.log(path);
       const data = await handle_inquiry(id);
       if (data != null) {
-        if (data.res.state === 'succeed') {
-          resolve(data.res.result);
+        if (data.res.status === 500) {
           clearInterval(interval_id);
+          reject(new Error('500'));
+        }
+        if (data.res.state === 'succeed') {
+          clearInterval(interval_id);
+          resolve(data.res.result);
         } else if (data.res.state === 'failed') {
           console.log(data.res.result.cause.message);
           clearInterval(interval_id);
