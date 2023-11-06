@@ -27,12 +27,19 @@ export const VideoPost = ({ nodsPageId, refetch }: { nodsPageId: number; refetch
     compressSegmentsMutation.mutate({ segments, nodsPageId });
   }, [transcriptMutation.isSuccess]);
 
-  // useEffect(() => {
-  //   if (!compressSegmentsMutation.isSuccess) return;
-  //   const vttText = compressSegmentsMutation.data;
-  //   summarisedVttMutation.mutate({ vttText, nodsPageId });
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [compressSegmentsMutation.isSuccess]);
+  useEffect(() => {
+    if (!compressSegmentsMutation.isSuccess) return;
+    const vttText = compressSegmentsMutation.data;
+    summarisedVttMutation.mutate({ vttText, nodsPageId });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [compressSegmentsMutation.isSuccess]);
+
+  useEffect(() => {
+    if (!summarisedVttMutation.isSuccess) return;
+    const vttText = summarisedVttMutation.data;
+    videoTitleMutation.mutate(vttText);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [summarisedVttMutation.isSuccess]);
 
   useEffect(() => {
     if (

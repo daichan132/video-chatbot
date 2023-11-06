@@ -71,6 +71,7 @@ export const useMutateHandler = () => {
       const blob = new Blob([resp_summerize], { type: 'text/vtt' });
       const file = new File([blob], 'text.vtt', { type: 'text/vtt' });
       useMutateUploadVtt.mutate({ files: [file], nodsPageId });
+      return vttText;
     },
     {
       onError: (err: any) => {
@@ -111,10 +112,8 @@ export const useMutateHandler = () => {
   const compressSegmentsMutation = useMutation(
     async (input: compressSegmentsType) => {
       const { segments, nodsPageId } = input;
-      const vttText = convertToVTT(segments);
-      console.log(vttText);
       const body = JSON.stringify({
-        segments: vttText,
+        segments,
       });
       console.log(body);
       const resultList = (await api_call_post('/api/openai/generate-embeddings', body)) as Result[];
@@ -133,6 +132,7 @@ export const useMutateHandler = () => {
         };
         await supabase.from('nods_page_section').insert(row).select().limit(1).single();
       });
+      const vttText = convertToVTT(segments);
       return vttText;
     },
     {
