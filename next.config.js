@@ -7,6 +7,7 @@ const nextConfig = {
   experimental: {
     scrollRestoration: true,
     serverMinification: false,
+    instrumentationHook: true,
   },
   async headers() {
     return [
