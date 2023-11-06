@@ -17,6 +17,7 @@ async function generate_embeddings(segments: Segment[]) {
       model: 'text-embedding-ada-002',
       input: segment.text,
     });
+    console.log(embeddingResponse);
     return embeddingResponse.data;
   };
 

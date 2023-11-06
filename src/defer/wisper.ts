@@ -10,7 +10,7 @@ async function wisper(filepath: string) {
     model: 'whisper-1',
     response_format: 'verbose_json',
   });
-  console.warn(response);
+  console.log(response);
   return response;
 }
 
